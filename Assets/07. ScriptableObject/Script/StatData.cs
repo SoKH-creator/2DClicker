@@ -4,10 +4,13 @@ using UnityEngine;
 
 public enum StatType
  {
+    Gold,
     ATK,
+    AutoAttackSpeed,
     Critical,
     CritChance,
     CritDamage,
+
 }
 
 [CreateAssetMenu(fileName = "New StatData", menuName = "Stats/Chracter Stats")]

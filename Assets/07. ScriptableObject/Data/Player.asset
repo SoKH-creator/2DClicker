@@ -15,10 +15,14 @@ MonoBehaviour:
   characterName: 
   stats:
   - statType: 0
-    baseValue: 0
+    baseValue: 100
   - statType: 1
-    baseValue: 0
+    baseValue: 5
   - statType: 2
-    baseValue: 0
+    baseValue: 1
   - statType: 3
+    baseValue: 2
+  - statType: 4
+    baseValue: 0
+  - statType: 5
     baseValue: 0
