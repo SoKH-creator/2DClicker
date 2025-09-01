@@ -4,12 +4,12 @@ using UnityEngine;
 
 public enum StatType
  {
-    Gold,
-    ATK,
-    AutoAttackSpeed,
-    Critical,
-    CritChance,
-    CritDamage,
+    Gold,                // 골드
+    ATK,                 // 공격력
+    AutoAttackSpeed,     // 자동 공격 속도
+    Critical,            // 치명타
+    CritChance,          // 치명타 확률
+    CritDamage,          // 치명타 피해
 
 }
 
