@@ -4,21 +4,23 @@ using UnityEngine;
 
 public enum StatType
  {
-    Health,
-    Mana,
-    Stamina
+    ATK,
+    Critical,
+    CritChance,
+    CritDamage,
 }
-public class NewBehaviourScript : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+[CreateAssetMenu(fileName = "New StatData", menuName = "Stats/Chracter Stats")]
+
+public class StatData : ScriptableObject
+{
+    public string characterName;
+    public List<StatEntry> stats;
+}
+
+[System.Serializable]
+public class StatEntry
+{
+    public StatType statType;
+    public float baseValue;
 }
