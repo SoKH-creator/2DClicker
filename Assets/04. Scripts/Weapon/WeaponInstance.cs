@@ -10,10 +10,10 @@ public class WeaponInstance : MonoBehaviour
     public int level;
     public string Id => weaponData.id;
     public string Name => weaponData.weaponName;
-    public float Attack => GetAttack(level);
-    public float Crit => GetCrit(level);
+    public float Attack => GetAttack();
+    public float Crit => GetCrit();
 
-    public float GetAttack(int level) { /*not yet dicided*/ return 0; }
-    public float GetCrit(int level) { /*not yet dicided*/ return 0; }
+    public float GetAttack() { /*not yet dicided*/ return 0; }
+    public float GetCrit() { /*not yet dicided*/ return 0; }
 }
 
