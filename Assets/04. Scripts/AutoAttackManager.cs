@@ -4,44 +4,44 @@ using UnityEngine;
 public class AutoAttackManager : MonoBehaviour
 {
     private Coroutine autoAttackCoroutine;
-    private float attackInterval = 1.0f; // °ø°İ °£°İ (ÃÊ)
+    private float attackInterval; // ê³µê²© ê°„ê²© (ì´ˆ)
 
-    // ÀÚµ¿ °ø°İ ½ÃÀÛ
+    // ìë™ ê³µê²© ì‹œì‘
     public void StartAutoAttack(int level)
     {
-        // ÀÌÀü ÄÚ·çÆ¾ÀÌ ÀÖ´Ù¸é Á¤Áö
+        // ì´ì „ ì½”ë£¨í‹´ì´ ìˆë‹¤ë©´ ì •ì§€
         if (autoAttackCoroutine != null)
         {
             StopCoroutine(autoAttackCoroutine);
         }
 
-        // ·¹º§¿¡ µû¶ó °ø°İ °£°İ ¼³Á¤
+        // ë ˆë²¨ì— ë”°ë¼ ê³µê²© ê°„ê²© ì„¤ì •
         attackInterval = 3.0f - (0.1f * level);
-        if (attackInterval < 0.1f) attackInterval = 0.1f; // ÃÖ¼Ò °£°İ Á¦ÇÑ
+        if (attackInterval < 0.1f) attackInterval = 0.1f; // ìµœì†Œ ê°„ê²© ì œí•œ
 
-        // »õ·Î¿î ÄÚ·çÆ¾ ½ÃÀÛ
+        // ìƒˆë¡œìš´ ì½”ë£¨í‹´ ì‹œì‘
         autoAttackCoroutine = StartCoroutine(AutoAttackRoutine());
     }
 
-    // ÀÚµ¿ °ø°İ Á¤Áö
+    // ìë™ ê³µê²© ì •ì§€
     public void StopAutoAttack()
     {
         if (autoAttackCoroutine != null)
         {
             StopCoroutine(autoAttackCoroutine);
-            autoAttackCoroutine = null; // ÄÚ·çÆ¾ º¯¼ö ÃÊ±âÈ­
+            autoAttackCoroutine = null; // ì½”ë£¨í‹´ ë³€ìˆ˜ ì´ˆê¸°í™”
         }
     }
 
-    // ÀÚµ¿ °ø°İ ÄÚ·çÆ¾
+    // ìë™ ê³µê²© ì½”ë£¨í‹´
     private IEnumerator AutoAttackRoutine()
     {
         while (true)
         {
-            // ÀÚµ¿ °ø°İ ·ÎÁ÷À» ¿©±â¿¡ ±¸Çö
-            Debug.Log("ÀÚµ¿ °ø°İ!");
+            // ìë™ ê³µê²© ë¡œì§ì„ ì—¬ê¸°ì— êµ¬í˜„
+            Debug.Log("ìë™ ê³µê²©!");
 
-            // ¼³Á¤µÈ °£°İ¸¸Å­ ´ë±â
+            // ì„¤ì •ëœ ê°„ê²©ë§Œí¼ ëŒ€ê¸°
             yield return new WaitForSeconds(attackInterval);
         }
     }
