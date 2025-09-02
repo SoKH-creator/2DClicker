@@ -5,7 +5,10 @@ public class AutoAttackManager : MonoBehaviour
 {
     private Coroutine autoAttackCoroutine;
     private float attackInterval; // 공격 간격 (초)
-    
+    public class PlayerStats
+    {
+        public float attackPower; // 임의 변수 플레이어의 공격력
+    }
 
     // 공격력과 관련된 임의 변수
     // 공격력을 받아올 변수명으로 변경
