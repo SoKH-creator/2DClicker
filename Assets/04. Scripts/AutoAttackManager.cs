@@ -13,7 +13,7 @@ public class AutoAttackManager : MonoBehaviour
     // 공격력과 관련된 임의 변수
     // 공격력을 받아올 변수명으로 변경
     [Header("공격력 참조")]
-    public PlayerStats playerStats; // 임의 변수: 플레이어의 능력치를 관리하는 스크립트 참조
+    //public PlayerStats playerStats; // 임의 변수: 플레이어의 능력치를 관리하는 스크립트 참조
     public float autoAttackBaseDamage; // 임의 변수: 자동 공격의 기본 공격력
 
     // 공격 간격을 받아올 임의 변수
