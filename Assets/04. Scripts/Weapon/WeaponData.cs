@@ -7,7 +7,16 @@ public enum WeaponStat { Attack, CritRate }
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Game/Weapon Data")]
 public class WeaponData : ScriptableObject
 {
-    public string weaponId;
-    public string displayName;
+    [Header("Identity")]
+    public string id;
+    public string weaponName;
     public Sprite icon;
+
+    [Header("Base State")]
+    public float baseAttack;
+    public float baseCritRate;
+
+    [Header("Delta Values")]
+    public float deltaAttack;
+    public float deltaCritRate;
 }
