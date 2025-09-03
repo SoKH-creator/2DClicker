@@ -15,9 +15,54 @@ public class WeaponActor : MonoBehaviour
     
     //public event Action OnChanged;
 
-    public bool TryUnlock(ref int exp) { return true; }
-    public bool TryUpgrade(ref int exp) { return true; }
-    public float GetAttack() { /*not yet dicided*/ return 0; }
-    public float GetCrit() { /*not yet dicided*/ return 0; }
+    public void Init()
+    {
+        weaponData = new WeaponData();
+        
+    }
+    public bool TryUnlock(ref int exp)
+    {
+        if (exp >= weaponData.requiredExp)
+        {
+            exp -= weaponData.requiredExp;
+
+            weaponData.requiredExp += weaponData.deltaRequiredExp;
+            
+            return true;
+        }
+        else
+        {
+            return false;
+        }            
+    }
+    public bool TryUpgrade(ref int exp)
+    {
+        if (exp >= weaponData.requiredExp)
+        {
+            exp -= weaponData.requiredExp;
+
+            weaponData.baseAttack += weaponData.deltaAttack;
+            weaponData.baseCritRate += weaponData.deltaCritRate;
+            weaponData.requiredExp += weaponData.deltaRequiredExp;
+            
+            return true;
+        }
+        else
+        {
+            return false ;
+        }
+    }
+    public void Unlock() 
+    {
+
+    }
+    public float GetAttack() 
+    {
+        /*not yet dicided*/ return 0;
+    }
+    public float GetCrit()
+    {
+        /*not yet dicided*/ return 0;
+    }
 }
 
