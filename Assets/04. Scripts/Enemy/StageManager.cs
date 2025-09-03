@@ -15,11 +15,11 @@ public class StageManager : MonoBehaviour
 
     [Header("Enemy")]
     public List<EnemyData> enemyPool;
-    public Transform spawnPoints;    // 하나의 Transform(또는 여러 자식 Transform을 가진 부모)
+    public Transform spawnPoints;
     public GameObject enemyPrefab;
 
     [Header("Balance")]
-    public int clickDamage = 1; // (프리팹 기본값 대신 전역으로 제어하고 싶다면 EnemyView에 setter를 추가하세요)
+    public int clickDamage = 1;
     public float hpScalePerStage = 1.2f; // 스테이지 당 적 체력 증가 배수
 
     // 현재 소환된 적 모델(단일 적 기준)
@@ -57,7 +57,7 @@ public class StageManager : MonoBehaviour
         // 랜덤으로 하나 선택
         var selectedData = candidates[Random.Range(0, candidates.Count)];
 
-        // 스케일된 체력 계산 (원본 SO는 수정하지 않기 위해 복제)
+        // 스케일된 체력 계산
         int scaledMaxHP = Mathf.Max(1, Mathf.RoundToInt(selectedData.maxHP * Mathf.Pow(hpScalePerStage, currentStage - 1)));
 
         var runtimeData = ScriptableObject.CreateInstance<EnemyData>();
@@ -86,7 +86,7 @@ public class StageManager : MonoBehaviour
         // 프리팹 인스턴스화
         var go = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
-        // 스프라이트 교체(프리팹에 SpriteRenderer가 있을 때)
+        // 스프라이트 교체
         var sr = go.GetComponent<SpriteRenderer>();
         if (sr != null && runtimeData.icon != null)
         {
@@ -94,13 +94,12 @@ public class StageManager : MonoBehaviour
         }
         else
         {
-            // 자식에 SpriteRenderer가 있는 경우 처리
             var srChild = go.GetComponentInChildren<SpriteRenderer>();
             if (srChild != null && runtimeData.icon != null)
                 srChild.sprite = runtimeData.icon;
         }
 
-        // EnemyView 찾기 (루트 또는 자식)
+        // EnemyView 찾기
         var view = go.GetComponent<EnemyView>() ?? go.GetComponentInChildren<EnemyView>();
         if (view == null)
         {
