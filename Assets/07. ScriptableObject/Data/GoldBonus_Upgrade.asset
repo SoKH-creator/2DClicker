@@ -10,19 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a1e063cc357f51479ce9cf0fca02a80, type: 3}
-  m_Name: Player
+  m_Name: GoldBonus_Upgrade
   m_EditorClassIdentifier: 
-  characterName: 
-  stats:
-  - statType: 0
-    baseValue: 100
-  - statType: 1
-    baseValue: 5
-  - statType: 2
-    baseValue: 1
-  - statType: 3
-    baseValue: 2
-  - statType: 4
-    baseValue: 0
-  - statType: 5
-    baseValue: 0
+  statType: 4
+  upgradeName: 
+  description: 
+  baseValue: 1
+  increasePerLevel: 1.5
+  baseCost: 20
+  costIncreasePerLevel: 1.3
+  maxLevel: 0
