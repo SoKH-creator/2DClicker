@@ -25,6 +25,14 @@ public class StageManager : MonoBehaviour
     // 현재 소환된 적 모델(단일 적 기준)
     private EnemyModel _currentEnemyModel;
 
+    // 외부에서 currentEnemyModel을 가져올 수 있도록 하는 public 속성
+    public EnemyModel currentEnemyModel
+    {
+        get { return _currentEnemyModel; }
+        private set { _currentEnemyModel = value; } // 이 줄은 선택 사항, 외부에서 값을 설정할 수 없게 함
+    }
+
+
     void Start()
     {
         UpdateStageUI();
