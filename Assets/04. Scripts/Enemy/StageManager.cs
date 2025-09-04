@@ -134,7 +134,7 @@ public class StageManager : MonoBehaviour
 
         _currentEnemyModel = new EnemyModel(runtimeData);
         view.Bind(_currentEnemyModel);
-        // view.SetClickDamage(clickDamage); // 클릭커 스크립트로 넘길 예정이면 주석
+        // view.SetClickDamage(clickDamage); // 클릭커 스크립트로 넘길 예정
 
         _currentEnemyModel.OnDead += OnEnemyDead;
 

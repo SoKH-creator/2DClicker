@@ -123,6 +123,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &7982977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7982979}
+  - component: {fileID: 7982978}
+  m_Layer: 0
+  m_Name: InfoGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!225 &7982978
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7982977}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!4 &7982979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7982977}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1118719503}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &170834493
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +594,10 @@ MonoBehaviour:
   killCount: 0
   stageText: {fileID: 542117291}
   enemyNameText: {fileID: 677406627}
+  infoGroup: {fileID: 7982978}
+  showDelay: 0.15
+  fadeDuration: 0.25
+  hideBetweenSpawns: 1
   enemyPool:
   - {fileID: 11400000, guid: 0918c24db914c08459bac56389917505, type: 2}
   spawnPoints: {fileID: 883545555}
@@ -670,7 +719,7 @@ RectTransform:
   m_Children:
   - {fileID: 542117290}
   - {fileID: 677406626}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 7982979}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -784,5 +833,5 @@ SceneRoots:
   - {fileID: 1999172674}
   - {fileID: 979387859}
   - {fileID: 883545555}
-  - {fileID: 1118719503}
   - {fileID: 1736251080}
+  - {fileID: 7982979}
