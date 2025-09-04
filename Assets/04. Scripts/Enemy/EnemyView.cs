@@ -61,7 +61,6 @@ public class EnemyView : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Enemy Died");
         Destroy(gameObject);
     }
 
@@ -77,7 +76,7 @@ public class EnemyView : MonoBehaviour
     // 외부에서 버튼 액션으로 호출 가능
     public void TakeDamage(int amount)
     {
-        if (model == null) return;    // 버그 수정
+        if (model == null) return; 
         model.TakeDamage(Mathf.Max(1, amount));
     }
 }
