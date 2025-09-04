@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI goldText;
 
-    public WeaponModel weaponModel;
+    public Temp_WeaponModel weaponModel;
     public PlayerData playerData;
     public GameObject warningPanel;
     public TextMeshProUGUI warningText;

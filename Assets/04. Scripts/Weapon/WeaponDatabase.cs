@@ -7,7 +7,7 @@ public static class WeaponDatabase
 {
     private static Dictionary<string, WeaponData> _dict;
 
-    public static Dictionary<string, WeaponData> dict { get { return _dict; } }
+    public static Dictionary<string, WeaponData> Dict { get { return _dict; } }
 
     public static void Init()
     {
@@ -17,12 +17,11 @@ public static class WeaponDatabase
         
         var weaponDatas = Resources.LoadAll<WeaponData>("WeaponData");
         foreach (var data in weaponDatas)
-            dict[data.id] = data;
+            _dict[data.id] = data;
     }
 
     public static WeaponData GetWeaponData(string id)
     {
-        if (_dict == null) Init();
         return _dict.TryGetValue(id, out WeaponData data) ? data : null;
     }
 }
