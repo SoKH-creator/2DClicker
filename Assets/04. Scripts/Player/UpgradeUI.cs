@@ -55,7 +55,7 @@ public class UpgradeUI : MonoBehaviour
         int currentLevel = statHandler.GetLevel(upgradeData.statType);
 
         titleText.text = upgradeData.upgradeName;
-        descriptionText.text = $": {upgradeData.GetValueAtLevel(currentLevel)}";
+        descriptionText.text = $"▷ {upgradeData.GetValueAtLevel(currentLevel)}";
         levelText.text = $"Lv {currentLevel}";
         costText.text = $"Cost: {upgradeData.GetCostAtLevel(currentLevel)}";
 

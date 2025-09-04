@@ -25,7 +25,9 @@ public class UpgradeData : ScriptableObject
     // 현재 레벨에서의 비용 계산
     public int GetCostAtLevel(int level)
     {
+        // Mathf.Pow(밑, 지수) 함수를 사용하여 지수적으로 증가
         return Mathf.RoundToInt(baseCost * Mathf.Pow(costIncreasePerLevel, level));
+
     }
 
     // 최대 레벨 도달 여부
