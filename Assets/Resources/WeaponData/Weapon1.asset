@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ed71006904e47409cd067b4fb147ca, type: 3}
   m_Name: Weapon1
   m_EditorClassIdentifier: 
-  id: basicAxe
+  id: Axe01
   weaponName: "\uB3C4\uB07C"
   icon: {fileID: -1616991933249458334, guid: 8e38b67387d8caa4fa6cb39e65b08a28, type: 3}
   baseAttack: 4

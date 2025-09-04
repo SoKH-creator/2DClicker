@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 무기 데이터 list
-[CreateAssetMenu(fileName = "WeaponData", menuName = "Game/Weapon Database")]
-public class WeaponDatabase : ScriptableObject
+public static class WeaponDatabase
 {
-    private Dictionary<string, WeaponData> _dict;
+    private static Dictionary<string, WeaponData> _dict;
 
-    public void Init()
+    public static Dictionary<string, WeaponData> dict { get { return _dict; } }
+
+    public static void Init()
     {
+        if (_dict != null) return;
+
         _dict = new Dictionary<string, WeaponData>();
-
+        
         var weaponDatas = Resources.LoadAll<WeaponData>("WeaponData");
-
         foreach (var data in weaponDatas)
-        {
-            if (!_dict.ContainsKey(data.id))
-                _dict.Add(data.id, data);
-        }
+            dict[data.id] = data;
     }
 
-    public WeaponData GetWeaponData(string id)
+    public static WeaponData GetWeaponData(string id)
     {
         if (_dict == null) Init();
         return _dict.TryGetValue(id, out WeaponData data) ? data : null;
