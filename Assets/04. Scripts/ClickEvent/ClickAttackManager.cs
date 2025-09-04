@@ -8,19 +8,12 @@ public class ClickAttackManager : MonoBehaviour
     // 유니티 인스펙터에서 드래그하여 연결하거나, Start()에서 FindObjectOfType<>()을 사용해 참조.
     public GameManager gameManager;
     public StageManager stageManager;
-
+    public AttackEffectManager effectManager;
     void Start()
     {
-        // 씬에서 GameManager와 StageManager를 찾아 자동으로 연결.        
-        if (gameManager == null)
-        {
-            gameManager = FindObjectOfType<GameManager>();
-        }
-
-        if (stageManager == null)
-        {
-            stageManager = FindObjectOfType<StageManager>();
-        }
+        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
+        if (stageManager == null) stageManager = FindObjectOfType<StageManager>();
+        if (effectManager == null) effectManager = FindObjectOfType<AttackEffectManager>();
     }
 
     void Update()
@@ -49,6 +42,14 @@ public class ClickAttackManager : MonoBehaviour
             // 몬스터 스크립트(EnemyModel)는 정수형(int) 대미지를 받으므로 형변환.
             stageManager.currentEnemyModel.TakeDamage(Mathf.RoundToInt(finalDamage));
 
+            // 클릭한 위치에 파티클 생성
+            Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            clickPosition.z = 0; // 2D 게임이므로 Z축을 0으로 설정
+
+            if (effectManager != null)
+            {
+                effectManager.SpawnAttackParticle(clickPosition);
+            }
             Debug.Log($"클릭! 몬스터에게 {finalDamage}만큼의 피해를 입혔습니다.");
         }
         else
