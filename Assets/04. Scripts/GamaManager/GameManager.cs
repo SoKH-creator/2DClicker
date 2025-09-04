@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     public WeaponModel weaponModel;
     public PlayerData playerData;
     public GameObject warningPanel;
-    public TextMeshPro warningText;
+    public TextMeshProUGUI warningText;
 
     public AudioSource bgmSource;
     public AudioMixer audioMixer;
@@ -44,6 +45,13 @@ public class GameManager : MonoBehaviour
         {
             playerData.gold -= amount;
             UpdateGoldUI();
+        }
+    }
+    public void WarningClose()
+    {
+        if (warningPanel != null)
+        {
+            warningPanel.SetActive(false);
         }
     }
     IEnumerator ShowWarning(string msg)
