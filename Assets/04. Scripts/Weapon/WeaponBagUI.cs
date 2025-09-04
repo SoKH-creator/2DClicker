@@ -7,8 +7,24 @@ public class WeaponBagUI : MonoBehaviour
     public GameObject slotPrefab;
     public Transform parentTransform;
 
+    private void Awake()
+    {
+        if (slotPrefab == null)
+            slotPrefab = Resources.Load<GameObject>("Prefabs/WeaponSlot");
+
+        if (parentTransform == null)
+            parentTransform = transform;
+    }
+
     private void OnEnable()
     {
+        if (WeaponDatabase.Dict == null) WeaponDatabase.Init();
+        
+        // 중복 생성 방지
+        for (int i = parentTransform.childCount; i > 0; i--)
+            Destroy(parentTransform.GetChild(i).gameObject);
+        
+        // 슬롯 생성
         foreach (var data in WeaponDatabase.Dict)
         {
             GameObject go = Instantiate(slotPrefab, parentTransform);
