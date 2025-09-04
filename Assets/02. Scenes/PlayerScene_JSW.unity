@@ -157,7 +157,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: de29d1205dd0c1c45823a4c39ff61e5b, type: 2}
     - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_text
-      value: 1
+      value: "\u25B71"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
+      propertyPath: m_fontSize
+      value: 34.15
       objectReference: {fileID: 0}
     - target: {fileID: 7913885138331660439, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_Pivot.x
@@ -576,11 +580,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: a5652a2a40b4e0c4c8fc0eada61f7261, type: 2}
     - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_text
-      value: 1
+      value: "\u25B71"
       objectReference: {fileID: 0}
     - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_fontSize
-      value: 35.8
+      value: 34.15
       objectReference: {fileID: 0}
     - target: {fileID: 7913885138331660439, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_Pivot.x
@@ -786,7 +790,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: e93ef3063e152ea4f86b6d0f28f22d07, type: 2}
     - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_text
-      value: 10
+      value: "\u25B710"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
+      propertyPath: m_fontSize
+      value: 34.15
       objectReference: {fileID: 0}
     - target: {fileID: 7913885138331660439, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_Pivot.x
@@ -954,6 +962,14 @@ PrefabInstance:
       propertyPath: upgradeData
       value: 
       objectReference: {fileID: 11400000, guid: 3d32b2b832b00f944b48f41e3f87b0f0, type: 2}
+    - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
+      propertyPath: m_text
+      value: "\u25B75\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
+      propertyPath: m_fontSize
+      value: 34.15
+      objectReference: {fileID: 0}
     - target: {fileID: 7913885138331660439, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -1074,7 +1090,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 53caa83f8b29c62489361500fc311db4, type: 2}
     - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_text
-      value: 5
+      value: "\u25B75"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7362167966718430744, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
+      propertyPath: m_fontSize
+      value: 34.15
       objectReference: {fileID: 0}
     - target: {fileID: 7913885138331660439, guid: 8ca008a3c1069d84f882909041373d90, type: 3}
       propertyPath: m_Pivot.x
