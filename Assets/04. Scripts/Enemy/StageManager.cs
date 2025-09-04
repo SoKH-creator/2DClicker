@@ -24,6 +24,7 @@ public class StageManager : MonoBehaviour
 
     // 현재 소환된 적 모델(단일 적 기준)
     private EnemyModel _currentEnemyModel;
+    private EnemyView _currentEnemyView;
 
     // 외부에서 currentEnemyModel을 가져올 수 있도록 하는 public 속성
     public EnemyModel currentEnemyModel
@@ -31,8 +32,7 @@ public class StageManager : MonoBehaviour
         get { return _currentEnemyModel; }
         private set { _currentEnemyModel = value; } // 이 줄은 선택 사항, 외부에서 값을 설정할 수 없게 함
     }
-
-
+    public EnemyView currentEnemyView => _currentEnemyView;
     void Start()
     {
         UpdateStageUI();
@@ -122,6 +122,7 @@ public class StageManager : MonoBehaviour
         // 모델 생성 및 바인딩
         _currentEnemyModel = new EnemyModel(runtimeData);
         view.Bind(_currentEnemyModel);
+        _currentEnemyView = view;
 
         // 적이 죽었을 때 호출될 콜백 등록
         _currentEnemyModel.OnDead += OnEnemyDead;

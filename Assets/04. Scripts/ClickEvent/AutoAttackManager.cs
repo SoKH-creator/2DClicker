@@ -12,18 +12,13 @@ public class AutoAttackManager : MonoBehaviour
     [Header("자동 공격 레벨")]
     public int autoAttackSkillLevel = 1; // 자동 공격 레벨
 
-    void Start()
-    {
-        // 씬에서 GameManager와 StageManager를 찾아 자동으로 연결.
-        if (gameManager == null)
-        {
-            gameManager = FindObjectOfType<GameManager>();
-        }
+    public AttackEffectManager effectManager;
 
-        if (stageManager == null)
-        {
-            stageManager = FindObjectOfType<StageManager>();
-        }
+    void Awake()
+    {
+        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
+        if (stageManager == null) stageManager = FindObjectOfType<StageManager>();
+        if (effectManager == null) effectManager = FindObjectOfType<AttackEffectManager>();
 
         // 게임 시작 시 자동 공격을 시작합.
         StartAutoAttack();
@@ -71,6 +66,12 @@ public class AutoAttackManager : MonoBehaviour
                 // 몬스터 스크립트는 정수형(int) 대미지를 받으므로 형변환.
                 stageManager.currentEnemyModel.TakeDamage(Mathf.RoundToInt(finalDamage));
 
+
+                // 몬스터 위치에 파티클 생성
+                if (effectManager != null)
+                {
+                    effectManager.SpawnAttackParticle(stageManager.currentEnemyView.transform.position);
+                }
                 Debug.Log($"자동 공격! 몬스터에게 {finalDamage}만큼의 피해를 입혔습니다.");
             }
 
