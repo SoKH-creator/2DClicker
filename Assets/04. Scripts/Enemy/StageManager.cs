@@ -1,37 +1,39 @@
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class StageManager : MonoBehaviour
 {
     [Header("Stage")]
-    public int currentStage = 1;
-    public int killCount = 0;
-    public int killTargetCount = 10; // 스테이지 당 처치해야 하는 적 수
+    public int currentStage = 1;   // 처치할 때마다 +1
+    public int killCount = 0;      // 누적 처치 수(표시용)
 
-    [Header("UI")]
-    public TextMeshProUGUI stageText;
+    [Header("UI (비어 있으면 자동 탐색)")]
+    public TextMeshProUGUI stageText;      // "Stage X  •  Kills N"
+    public TextMeshProUGUI enemyNameText;  // "귀여운/평범한/뚱뚱한 동그라미"
 
     [Header("Enemy")]
-    public List<EnemyData> enemyPool;
+    public EnemyData[] enemyPool;
     public Transform spawnPoints;
     public GameObject enemyPrefab;
 
     [Header("Balance")]
     public int clickDamage = 1;
-    public float hpScalePerStage = 1.2f; // 스테이지 당 적 체력 증가 배수
+    public float hpScalePerStage = 1.2f;   // HP 테이블 없을 때만 사용
 
-    // 현재 소환된 적 모델(단일 적 기준)
+    [Header("Per-Spawn Random Scale & Name")]
+    public Vector2 enemyScaleRange = new Vector2(0.8f, 1.6f);
+    public float smallCutoff = 0.95f; // 이보다 작으면 "귀여운"
+    public float bigCutoff = 1.25f; // 이 이상이면 "뚱뚱한"
+
     private EnemyModel _currentEnemyModel;
+    public EnemyModel currentEnemyModel => _currentEnemyModel;
 
-    // 외부에서 currentEnemyModel을 가져올 수 있도록 하는 public 속성
-    public EnemyModel currentEnemyModel
+    void Awake()
     {
-        get { return _currentEnemyModel; }
-        private set { _currentEnemyModel = value; } // 이 줄은 선택 사항, 외부에서 값을 설정할 수 없게 함
+        AutoWireUI();  // 비어 있으면 자동으로 찾아 연결
     }
-
 
     void Start()
     {
@@ -39,111 +41,151 @@ public class StageManager : MonoBehaviour
         SpawnEnemy();
     }
 
+    // ---------- UI ----------
+    void AutoWireUI()
+    {
+        // 이미 연결되어 있으면 패스
+        if (stageText == null || enemyNameText == null)
+        {
+            var all = GameObject.FindObjectsOfType<TextMeshProUGUI>(true);
+
+            if (stageText == null)
+            {
+                stageText = all.FirstOrDefault(t =>
+                    t.name.ToLower().Contains("stage"))    // 이름에 Stage 포함
+                    ?? all.FirstOrDefault(t => t.text.Contains("Stage")) // 초기 텍스트가 Stage로 시작
+                    ?? all.FirstOrDefault(t => t != null); // 아무거나 첫 번째
+                if (stageText != null)
+                    Debug.Log($"[UI] stageText auto-wired -> {GetPath(stageText.gameObject)}");
+                else
+                    Debug.LogWarning("[UI] stageText를 찾지 못했어요. 인스펙터에 드래그해서 연결해줘!");
+            }
+
+            if (enemyNameText == null)
+            {
+                enemyNameText = all
+                    .Where(t => t != stageText) // stageText와 같은 객체는 제외
+                    .FirstOrDefault(t =>
+                        t.name.ToLower().Contains("name") || t.text.Contains("동그라미"))
+                    ?? all.FirstOrDefault(t => t != stageText);
+                if (enemyNameText != null)
+                    Debug.Log($"[UI] enemyNameText auto-wired -> {GetPath(enemyNameText.gameObject)}");
+                else
+                    Debug.LogWarning("[UI] enemyNameText를 찾지 못했어요. 인스펙터에 드래그해서 연결해줘!");
+            }
+        }
+    }
+
+    string GetPath(GameObject go)
+    {
+        string path = go.name;
+        Transform t = go.transform.parent;
+        while (t != null)
+        {
+            path = t.name + "/" + path;
+            t = t.parent;
+        }
+        return path;
+    }
+
     void UpdateStageUI()
     {
         if (stageText != null)
-            stageText.text = $"Stage {currentStage}/{killTargetCount}";
+            stageText.text = $"Stage {currentStage}  |  Kills {killCount}";
     }
 
-    /// 적 소환 함수
-    /// - enemyPool에서 현재 스테이지에 등장 가능한 후보를 골라 랜덤 선택
-    /// - spawnPoints가 null이면 Vector3.zero, 있으면 spawnPoints의 임의 자식 위치 혹은 spawnPoints.position 사용
-    /// - runtime에 체력을 스케일링한 임시 EnemyData를 만들어 EnemyModel에 넣어 바인딩
+    // ---------- Spawn ----------
     void SpawnEnemy()
     {
-        // 후보 필터링
-        var candidates = enemyPool
-            .Where(e => e != null && e.appearStage <= currentStage)
-            .ToList();
-
-        if (candidates.Count == 0)
+        if (enemyPrefab == null)
         {
-            Debug.LogWarning("StageManager: 등장 가능한 EnemyData가 없습니다. enemyPool과 appearStage를 확인하세요.");
+            Debug.LogError("StageManager: enemyPrefab 비어있음");
             return;
         }
 
-        // 랜덤으로 하나 선택
+        var candidates = enemyPool?.Where(e => e != null && e.appearStage <= currentStage).ToList();
+        if (candidates == null || candidates.Count == 0)
+        {
+            Debug.LogWarning("StageManager: 등장 가능한 EnemyData 없음 (enemyPool/appearStage 확인)");
+            return;
+        }
+
         var selectedData = candidates[Random.Range(0, candidates.Count)];
 
-        // 스케일된 체력 계산
-        int scaledMaxHP = Mathf.Max(1, Mathf.RoundToInt(selectedData.maxHP * Mathf.Pow(hpScalePerStage, currentStage - 1)));
+        int fallbackHP = Mathf.Max(1,
+            Mathf.RoundToInt(selectedData.maxHP * Mathf.Pow(hpScalePerStage, currentStage - 1)));
+
+        int finalMaxHP = (selectedData.hpTable != null && selectedData.hpTable.Count > 0)
+            ? selectedData.GetHPForStage(currentStage, fallbackHP)
+            : fallbackHP;
 
         var runtimeData = ScriptableObject.CreateInstance<EnemyData>();
         runtimeData.enemyName = selectedData.enemyName;
         runtimeData.appearStage = selectedData.appearStage;
         runtimeData.icon = selectedData.icon;
-        runtimeData.maxHP = scaledMaxHP;
+        runtimeData.maxHP = finalMaxHP;
 
-        // 소환 위치 결정
         Vector3 spawnPos = Vector3.zero;
         if (spawnPoints != null)
         {
-            if (spawnPoints.childCount > 0)
-            {
-                // 자식이 있으면 임의의 자식 위치 사용
-                var child = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
-                spawnPos = child.position;
-            }
-            else
-            {
-                // 자식이 없으면 부모의 위치 사용
-                spawnPos = spawnPoints.position;
-            }
+            spawnPos = (spawnPoints.childCount > 0)
+                ? spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount)).position
+                : spawnPoints.position;
         }
 
-        // 프리팹 인스턴스화
         var go = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
-        // 스프라이트 교체
-        var sr = go.GetComponent<SpriteRenderer>();
-        if (sr != null && runtimeData.icon != null)
-        {
-            sr.sprite = runtimeData.icon;
-        }
-        else
-        {
-            var srChild = go.GetComponentInChildren<SpriteRenderer>();
-            if (srChild != null && runtimeData.icon != null)
-                srChild.sprite = runtimeData.icon;
-        }
+        var sr = go.GetComponent<SpriteRenderer>() ?? go.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null && runtimeData.icon != null) sr.sprite = runtimeData.icon;
 
-        // EnemyView 찾기
+        // 매번 랜덤 스케일
+        float s = Random.Range(enemyScaleRange.x, enemyScaleRange.y);
+        go.transform.localScale = Vector3.one * s;
+
+        // 스케일에 따라 이름 변경
+        string sizedName =
+            (s < smallCutoff) ? "귀여운 동그라미" :
+            (s >= bigCutoff) ? "뚱뚱한 동그라미" :
+                                "평범한 동그라미";
+        runtimeData.enemyName = sizedName;
+
+        if (enemyNameText != null) enemyNameText.text = runtimeData.enemyName;
+
         var view = go.GetComponent<EnemyView>() ?? go.GetComponentInChildren<EnemyView>();
         if (view == null)
         {
-            Debug.LogError("StageManager: enemyPrefab에 EnemyView 컴포넌트가 필요합니다.");
+            Debug.LogError("StageManager: enemyPrefab에 EnemyView 필요");
             Destroy(go);
             return;
         }
 
-        // (선택) EnemyView에 클릭 데미지 값 직접 제공하려면 EnemyView에 public setter 추가 필요
-        // 예: view.SetClickDamage(clickDamage);
-
-        // 모델 생성 및 바인딩
         _currentEnemyModel = new EnemyModel(runtimeData);
         view.Bind(_currentEnemyModel);
+        view.SetClickDamage(clickDamage);
 
-        // 적이 죽었을 때 호출될 콜백 등록
         _currentEnemyModel.OnDead += OnEnemyDead;
+
+        Debug.Log($"[Spawn] Stage {currentStage}, Scale {s:F2}, Name {runtimeData.enemyName}");
+        UpdateStageUI();
     }
 
-    // 적 사망 처리: 킬 카운트 증가, 스테이지 클리어 체크, 다음 적 소환
+    // ---------- Kill ----------
     void OnEnemyDead()
     {
         if (_currentEnemyModel != null)
             _currentEnemyModel.OnDead -= OnEnemyDead;
 
         killCount++;
+        currentStage++; // 처치 즉시 스테이지 상승
 
-        if (killCount >= killTargetCount)
-        {
-            currentStage++;
-            killCount = 0;
-            UpdateStageUI();
-            // 필요하면 스테이지 업 이벤트 / 보상 창 띄우기 등 여기에 추가
-        }
-
-        // 다음 적 소환
+        Debug.Log($"[Kill] -> Stage {currentStage}, Kills {killCount}");
+        UpdateStageUI();
         SpawnEnemy();
+    }
+
+    void OnDisable()
+    {
+        if (_currentEnemyModel != null)
+            _currentEnemyModel.OnDead -= OnEnemyDead;
     }
 }

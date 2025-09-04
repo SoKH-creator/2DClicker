@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &161383831 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7333693800797217928, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
-  m_PrefabInstance: {fileID: 870881136837443884}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &170834493
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,14 +277,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStage: 1
   killCount: 0
-  killTargetCount: 10
-  stageText: {fileID: 161383831}
+  stageText: {fileID: 1158177070}
+  enemyNameText: {fileID: 1176351150}
   enemyPool:
   - {fileID: 11400000, guid: 0918c24db914c08459bac56389917505, type: 2}
   spawnPoints: {fileID: 883545555}
   enemyPrefab: {fileID: 2275002042508049397, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
   clickDamage: 1
   hpScalePerStage: 1.2
+  enemyScaleRange: {x: 0.8, y: 1.4}
+  smallCutoff: 0.95
+  bigCutoff: 1.25
 --- !u!4 &979387859
 Transform:
   m_ObjectHideFlags: 0
@@ -311,6 +303,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1158177070 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7333693800797217928, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
+  m_PrefabInstance: {fileID: 2026761061}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1176351150 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 601362029652340189, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
+  m_PrefabInstance: {fileID: 2026761061}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1999172671
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +393,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &870881136837443884
+--- !u!1001 &2026761061
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -394,6 +408,10 @@ PrefabInstance:
     - target: {fileID: 2275002042508049397, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333693800797217928, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
+      propertyPath: m_text
+      value: Stage 1/10
       objectReference: {fileID: 0}
     - target: {fileID: 9053042466923983121, guid: c77dbab64df0fbb449fa9aacd9da163e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -448,4 +466,4 @@ SceneRoots:
   - {fileID: 1999172674}
   - {fileID: 979387859}
   - {fileID: 883545555}
-  - {fileID: 870881136837443884}
+  - {fileID: 2026761061}
