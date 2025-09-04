@@ -1,191 +1,213 @@
 using System.Linq;
+using System.Collections;                 
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;                     
 
 [DisallowMultipleComponent]
 public class StageManager : MonoBehaviour
 {
-    [Header("Stage")]
-    public int currentStage = 1;   // 처치할 때마다 +1
-    public int killCount = 0;      // 누적 처치 수(표시용)
+    [Header("Stage / Cycle")]
+    public int currentStage = 1;
+    public int maxStagePerCycle = 10;
+    public int phaseIndex = 0;
+    public int killCount = 0;
 
-    [Header("UI (비어 있으면 자동 탐색)")]
-    public TextMeshProUGUI stageText;      // "Stage X  •  Kills N"
-    public TextMeshProUGUI enemyNameText;  // "귀여운/평범한/뚱뚱한 동그라미"
+    [Header("UI")]
+    public TextMeshProUGUI stageText;
+    public TextMeshProUGUI enemyNameText;
+
+    [Header("UI Group Appear")]          
+    public CanvasGroup infoGroup;         
+    public float showDelay = 0.15f;       
+    public float fadeDuration = 0.25f;    
+    public bool hideBetweenSpawns = true; 
 
     [Header("Enemy")]
     public EnemyData[] enemyPool;
     public Transform spawnPoints;
     public GameObject enemyPrefab;
+    public Transform enemiesParent;
 
     [Header("Balance")]
     public int clickDamage = 1;
-    public float hpScalePerStage = 1.2f;   // HP 테이블 없을 때만 사용
+    public float hpScalePerStage = 1.2f;
 
     [Header("Per-Spawn Random Scale & Name")]
     public Vector2 enemyScaleRange = new Vector2(0.8f, 1.6f);
-    public float smallCutoff = 0.95f; // 이보다 작으면 "귀여운"
-    public float bigCutoff = 1.25f; // 이 이상이면 "뚱뚱한"
+    public float smallCutoff = 0.95f;
+    public float bigCutoff = 1.25f;
 
     private EnemyModel _currentEnemyModel;
     public EnemyModel currentEnemyModel => _currentEnemyModel;
 
     void Awake()
     {
-        AutoWireUI();  // 비어 있으면 자동으로 찾아 연결
+        if (enemyPrefab == null)
+        {
+            Debug.LogError("StageManager: enemyPrefab이 비어 있습니다. Project 프리팹 에셋을 연결하세요.");
+        }
+        else if (enemyPrefab.scene.IsValid())
+        {
+            Debug.LogError("StageManager: enemyPrefab에 씬 오브젝트가 연결됨. Project 프리팹 에셋으로 교체하세요.");
+        }
     }
 
     void Start()
     {
+        // 시작 시 UI 감추기
+        if (infoGroup != null) SetGroupVisible(false, instant: true);
+
         UpdateStageUI();
         SpawnEnemy();
-    }
-
-    // ---------- UI ----------
-    void AutoWireUI()
-    {
-        // 이미 연결되어 있으면 패스
-        if (stageText == null || enemyNameText == null)
-        {
-            var all = GameObject.FindObjectsOfType<TextMeshProUGUI>(true);
-
-            if (stageText == null)
-            {
-                stageText = all.FirstOrDefault(t =>
-                    t.name.ToLower().Contains("stage"))    // 이름에 Stage 포함
-                    ?? all.FirstOrDefault(t => t.text.Contains("Stage")) // 초기 텍스트가 Stage로 시작
-                    ?? all.FirstOrDefault(t => t != null); // 아무거나 첫 번째
-                if (stageText != null)
-                    Debug.Log($"[UI] stageText auto-wired -> {GetPath(stageText.gameObject)}");
-                else
-                    Debug.LogWarning("[UI] stageText를 찾지 못했어요. 인스펙터에 드래그해서 연결해줘!");
-            }
-
-            if (enemyNameText == null)
-            {
-                enemyNameText = all
-                    .Where(t => t != stageText) // stageText와 같은 객체는 제외
-                    .FirstOrDefault(t =>
-                        t.name.ToLower().Contains("name") || t.text.Contains("동그라미"))
-                    ?? all.FirstOrDefault(t => t != stageText);
-                if (enemyNameText != null)
-                    Debug.Log($"[UI] enemyNameText auto-wired -> {GetPath(enemyNameText.gameObject)}");
-                else
-                    Debug.LogWarning("[UI] enemyNameText를 찾지 못했어요. 인스펙터에 드래그해서 연결해줘!");
-            }
-        }
-    }
-
-    string GetPath(GameObject go)
-    {
-        string path = go.name;
-        Transform t = go.transform.parent;
-        while (t != null)
-        {
-            path = t.name + "/" + path;
-            t = t.parent;
-        }
-        return path;
     }
 
     void UpdateStageUI()
     {
         if (stageText != null)
-            stageText.text = $"Stage {currentStage}  |  Kills {killCount}";
+            stageText.text = $"Stage {currentStage}";
     }
 
-    // ---------- Spawn ----------
     void SpawnEnemy()
     {
-        if (enemyPrefab == null)
-        {
-            Debug.LogError("StageManager: enemyPrefab 비어있음");
-            return;
-        }
+        if (enemyPrefab == null) return;
 
-        var candidates = enemyPool?.Where(e => e != null && e.appearStage <= currentStage).ToList();
-        if (candidates == null || candidates.Count == 0)
-        {
-            Debug.LogWarning("StageManager: 등장 가능한 EnemyData 없음 (enemyPool/appearStage 확인)");
-            return;
-        }
+        // 후보 찾기
+        var candidates = enemyPool.Where(e => e != null && e.appearPhase == phaseIndex).ToList();
+        if (candidates.Count == 0) candidates = enemyPool.Where(e => e != null && e.appearPhase <= phaseIndex).ToList();
+        if (candidates.Count == 0) candidates = enemyPool.Where(e => e != null).ToList();
 
         var selectedData = candidates[Random.Range(0, candidates.Count)];
 
+        int globalStageIndex = phaseIndex * maxStagePerCycle + currentStage;
         int fallbackHP = Mathf.Max(1,
-            Mathf.RoundToInt(selectedData.maxHP * Mathf.Pow(hpScalePerStage, currentStage - 1)));
+            Mathf.RoundToInt(selectedData.maxHP * Mathf.Pow(hpScalePerStage, globalStageIndex - 1)));
 
         int finalMaxHP = (selectedData.hpTable != null && selectedData.hpTable.Count > 0)
             ? selectedData.GetHPForStage(currentStage, fallbackHP)
             : fallbackHP;
 
+        // 런타임 EnemyData
         var runtimeData = ScriptableObject.CreateInstance<EnemyData>();
         runtimeData.enemyName = selectedData.enemyName;
         runtimeData.appearStage = selectedData.appearStage;
         runtimeData.icon = selectedData.icon;
         runtimeData.maxHP = finalMaxHP;
+        runtimeData.appearPhase = selectedData.appearPhase;
 
-        Vector3 spawnPos = Vector3.zero;
-        if (spawnPoints != null)
-        {
-            spawnPos = (spawnPoints.childCount > 0)
+        // 스폰 위치
+        Vector3 pos = spawnPoints
+            ? (spawnPoints.childCount > 0
                 ? spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount)).position
-                : spawnPoints.position;
-        }
+                : spawnPoints.position)
+            : Vector3.zero;
 
-        var go = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+        var go = Instantiate(enemyPrefab, pos, Quaternion.identity);
+        if (enemiesParent) go.transform.SetParent(enemiesParent, true);
 
+        // 스프라이트
         var sr = go.GetComponent<SpriteRenderer>() ?? go.GetComponentInChildren<SpriteRenderer>();
-        if (sr != null && runtimeData.icon != null) sr.sprite = runtimeData.icon;
+        if (sr && runtimeData.icon) sr.sprite = runtimeData.icon;
 
-        // 매번 랜덤 스케일
+        // 랜덤 스케일
         float s = Random.Range(enemyScaleRange.x, enemyScaleRange.y);
         go.transform.localScale = Vector3.one * s;
 
-        // 스케일에 따라 이름 변경
-        string sizedName =
-            (s < smallCutoff) ? "귀여운 동그라미" :
-            (s >= bigCutoff) ? "뚱뚱한 동그라미" :
-                                "평범한 동그라미";
+        // 이름 덮어쓰기
+        string sizedName = (s < smallCutoff) ? "귀여운 동그라미"
+                         : (s >= bigCutoff) ? "뚱뚱한 동그라미"
+                                             : "평범한 동그라미";
         runtimeData.enemyName = sizedName;
 
-        if (enemyNameText != null) enemyNameText.text = runtimeData.enemyName;
+        // UI 텍스트 최신화
+        if (enemyNameText) enemyNameText.text = runtimeData.enemyName;
+        UpdateStageUI();
 
+        // EnemyView
         var view = go.GetComponent<EnemyView>() ?? go.GetComponentInChildren<EnemyView>();
         if (view == null)
         {
-            Debug.LogError("StageManager: enemyPrefab에 EnemyView 필요");
+            Debug.LogError("StageManager: enemyPrefab에 EnemyView 컴포넌트가 필요합니다.");
             Destroy(go);
             return;
         }
 
         _currentEnemyModel = new EnemyModel(runtimeData);
         view.Bind(_currentEnemyModel);
-        view.SetClickDamage(clickDamage);
+        // view.SetClickDamage(clickDamage); // 클릭커 스크립트로 넘길 예정이면 주석
 
         _currentEnemyModel.OnDead += OnEnemyDead;
 
-        Debug.Log($"[Spawn] Stage {currentStage}, Scale {s:F2}, Name {runtimeData.enemyName}");
-        UpdateStageUI();
+        // ★ 스폰될 때만 InfoGroup을 부드럽게 보여주기
+        if (infoGroup != null)
+        {
+            SetGroupVisible(false, instant: true); // 먼저 숨기고
+            StartCoroutine(ShowInfoRoutine());
+        }
     }
 
-    // ---------- Kill ----------
     void OnEnemyDead()
     {
-        if (_currentEnemyModel != null)
-            _currentEnemyModel.OnDead -= OnEnemyDead;
+        if (_currentEnemyModel != null) _currentEnemyModel.OnDead -= OnEnemyDead;
 
         killCount++;
-        currentStage++; // 처치 즉시 스테이지 상승
+        currentStage++;
 
-        Debug.Log($"[Kill] -> Stage {currentStage}, Kills {killCount}");
+        if (currentStage > maxStagePerCycle)
+        {
+            currentStage = 1;
+            phaseIndex++;
+        }
+
+        // 적이 죽으면 잠깐 숨기기(다음 스폰에서 다시 나타남)
+        if (hideBetweenSpawns && infoGroup != null)
+            SetGroupVisible(false, instant: false);
+
         UpdateStageUI();
         SpawnEnemy();
     }
 
     void OnDisable()
     {
-        if (_currentEnemyModel != null)
-            _currentEnemyModel.OnDead -= OnEnemyDead;
+        if (_currentEnemyModel != null) _currentEnemyModel.OnDead -= OnEnemyDead;
+    }
+
+    // ---------- UI 페이드 유틸 ----------
+
+    void SetGroupVisible(bool visible, bool instant = false)
+    {
+        if (infoGroup == null) return;
+
+        infoGroup.interactable = visible;
+        infoGroup.blocksRaycasts = visible;
+
+        if (instant)
+        {
+            infoGroup.alpha = visible ? 1f : 0f;
+        }
+        else
+        {
+            StopCoroutine(nameof(FadeGroup));
+            StartCoroutine(FadeGroup(visible ? 1f : 0f, fadeDuration));
+        }
+    }
+
+    IEnumerator ShowInfoRoutine()
+    {
+        if (showDelay > 0f) yield return new WaitForSeconds(showDelay);
+        SetGroupVisible(true, instant: false);
+    }
+
+    IEnumerator FadeGroup(float target, float duration)
+    {
+        float start = infoGroup.alpha;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            infoGroup.alpha = Mathf.Lerp(start, target, t / duration);
+            yield return null;
+        }
+        infoGroup.alpha = target;
     }
 }
