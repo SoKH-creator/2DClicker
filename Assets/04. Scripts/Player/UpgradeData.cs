@@ -6,7 +6,7 @@ public class UpgradeData : ScriptableObject
 {
     public StatType statType;
     public string upgradeName;
-    public string description;
+    public string baseDescription;
 
     public float baseValue;            // 시작 값
     public float increasePerLevel;     // 레벨당 증가치
@@ -25,7 +25,7 @@ public class UpgradeData : ScriptableObject
     // 현재 레벨에서의 비용 계산
     public int GetCostAtLevel(int level)
     {
-        return Mathf.RoundToInt(baseCost + (costIncreasePerLevel * level));
+        return Mathf.RoundToInt(baseCost * Mathf.Pow(costIncreasePerLevel, level));
     }
 
     // 최대 레벨 도달 여부
@@ -33,4 +33,17 @@ public class UpgradeData : ScriptableObject
     {
         return (maxLevel > 0 && level >= maxLevel);
     }
+
+    public string GetDescriptionAtLevel(int level)
+    {
+        // 레벨에 따른 현재 값과 다음 레벨 값을 계산
+        float currentValue = GetValueAtLevel(level);
+        float nextValue = GetValueAtLevel(level + 1);
+
+        string formattedDescription = string.Format(baseDescription, currentValue, nextValue);
+
+        return formattedDescription;
+    }
+
+
 }

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class StatHandler : MonoBehaviour
 {
     // 플레이어의 업그레이드 레벨 저장
     private Dictionary<StatType, int> upgradeLevels = new Dictionary<StatType, int>();
+    private Dictionary<StatType, int> upgradeValue = new Dictionary<StatType, int>();
 
     // 골드 변수 통합
     private int _gold = 100; // 초기 골드 (테스트용)
@@ -18,7 +20,7 @@ public class StatHandler : MonoBehaviour
         }
     }
 
-    public System.Action OnGoldChanged; // 골드 변경 이벤트
+    public Action OnGoldChanged; // 골드 변경 이벤트
 
     // 특정 능력치 레벨 가져오기
     public int GetLevel(StatType type)
@@ -26,12 +28,20 @@ public class StatHandler : MonoBehaviour
         return upgradeLevels.ContainsKey(type) ? upgradeLevels[type] : 0;
     }
 
+    public int GetValue(StatType type)
+    {
+        return upgradeValue.ContainsKey(type) ? upgradeValue[type] : 0;
+    }
+
+
     // 특정 능력치 최종 값 계산
     public float GetFinalStat(UpgradeData upgradeData)
     {
         int level = GetLevel(upgradeData.statType);
+        int value = GetValue(upgradeData.statType);
         return upgradeData.GetValueAtLevel(level);
     }
+
 
     // 업그레이드 시도
     public bool TryUpgrade(UpgradeData upgradeData)

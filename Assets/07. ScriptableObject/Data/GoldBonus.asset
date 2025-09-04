@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a1e063cc357f51479ce9cf0fca02a80, type: 3}
-  m_Name: ATK_Upgrade
+  m_Script: {fileID: 11500000, guid: e551d2fcec247a04a96a7101944963e5, type: 3}
+  m_Name: GoldBonus
   m_EditorClassIdentifier: 
-  statType: 0
-  upgradeName: 
-  description: 
-  baseValue: 5
+  statType: 4
+  upgradeName: "\uACE8\uB4DC \uD68D\uB4DD\uB7C9 \uC99D\uAC00"
+  baseDescription: 0
+  baseValue: 10
   increasePerLevel: 5
-  baseCost: 50
-  costIncreasePerLevel: 1.1
+  baseCost: 10
+  costIncreasePerLevel: 2
   maxLevel: 0

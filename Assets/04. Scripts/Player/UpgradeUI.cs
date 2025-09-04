@@ -12,8 +12,7 @@ public class UpgradeUI : MonoBehaviour
     public TextMeshProUGUI descriptionText;     // 효과 설명
     public TextMeshProUGUI levelText;           // 현재 업그레이드 레벨
     public TextMeshProUGUI costText;            // 업그레이드 비용 
-    public Button upgradeButton;
-
+    public Button upgradeButton;              // 업그레이드 버튼
     private void Start()
     {
         if (upgradeButton != null)
@@ -56,7 +55,7 @@ public class UpgradeUI : MonoBehaviour
         int currentLevel = statHandler.GetLevel(upgradeData.statType);
 
         titleText.text = upgradeData.upgradeName;
-        descriptionText.text = upgradeData.description;
+        descriptionText.text = $": {upgradeData.GetValueAtLevel(currentLevel)}";
         levelText.text = $"Lv {currentLevel}";
         costText.text = $"Cost: {upgradeData.GetCostAtLevel(currentLevel)}";
 
