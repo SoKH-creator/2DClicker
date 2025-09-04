@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Sword01
   weaponName: "\uC9C1\uAC80"
-  icon: {fileID: -1616991933249458334, guid: 8e38b67387d8caa4fa6cb39e65b08a28, type: 3}
-  baseAttack: 4
-  baseCritRate: 10
-  requiredExp: 0
+  icon: {fileID: 1563905169154104396, guid: 2eaf63e0dad480e40a6a9dcaccbe283a, type: 3}
+  baseAttack: 1000
+  baseCritRate: 20
+  requiredExp: 500
   deltaAttack: 1
-  deltaCritRate: 5
-  deltaRequiredExp: 0
+  deltaCritRate: 7
+  deltaRequiredExp: 500

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Harpe01
   weaponName: "\uD558\uB974\uD398"
-  icon: {fileID: -1616991933249458334, guid: 8e38b67387d8caa4fa6cb39e65b08a28, type: 3}
-  baseAttack: 4
-  baseCritRate: 10
-  requiredExp: 0
+  icon: {fileID: -1700892053915081011, guid: 80e0d608ebd3a3e40b56afc187937e80, type: 3}
+  baseAttack: 100
+  baseCritRate: 15
+  requiredExp: 100
   deltaAttack: 1
   deltaCritRate: 5
-  deltaRequiredExp: 0
+  deltaRequiredExp: 100
