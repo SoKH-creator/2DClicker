@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateGoldUI();
-        PlayBGM(titleBGM);
+        //PlayBGM(titleBGM);
         CalculateFinalStats();
         volumeSlider.onValueChanged.AddListener(SetBGMVolume);
         CreateUpgradeUI();
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     
     public void UpdateGoldUI()
     {
-        goldText.text = $"Gold : {gold}";
+        //goldText.text = $"Gold : {gold}";
     }
     public void TryUseGold(int amount)
     {

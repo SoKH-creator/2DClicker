@@ -53,8 +53,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89110933757cb724aaba45b7c8599e8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statHandler: {fileID: 0}
-  upgradeData: {fileID: 0}
+  statHandler: {fileID: 121758586371140117, guid: e945f5f94d8b72f42814d1dd64218c54, type: 3}
+  upgradeData: {fileID: 11400000, guid: 53caa83f8b29c62489361500fc311db4, type: 2}
   titleText: {fileID: 404241921202584807}
   descriptionText: {fileID: 7362167966718430744}
   levelText: {fileID: 5520320505121466765}
