@@ -1,16 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FinalStats : MonoBehaviour
 {
-        public float finalAttack;
-        public float finalCritChance;
+    public float finalAttack;
+    public float finalCritChance;
 
-        public void Calculate(PlayerData player, WeaponRuntime weapon)
-        {
-            // 간단한 계산 공식 (임시용)
-            finalAttack = player.baseAttack + weapon.Models[weapon.equippedId].GetAttack();
-            finalCritChance = player.baseCritRate + weapon.Models[weapon.equippedId].GetCrit();
+    private UpgradeData playerAtkData;
+    private UpgradeData playerCritData;
+
+    private void Start()
+    {
+        playerAtkData = Resources.Load<UpgradeData>("PlayerData/ATK");
+        playerCritData = Resources.Load<UpgradeData>("PlayerData/CritChance");
+    }
+    public void Calculate(StatHandler player, WeaponRuntime weapon)
+    {
+        // 간단한 계산 공식 (임시용)
+        finalAttack = player.GetFinalStat(playerAtkData) + weapon.Models[weapon.equippedId].GetAttack();
+        finalCritChance = player.GetFinalStat(playerCritData) + weapon.Models[weapon.equippedId].GetCrit();
     }
 }

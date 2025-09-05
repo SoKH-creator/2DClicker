@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e551d2fcec247a04a96a7101944963e5, type: 3}
   m_Name: GoldBonus
   m_EditorClassIdentifier: 
-  statType: 0
+  statType: 4
   upgradeName: "\uACE8\uB4DC \uD68D\uB4DD\uB7C9 \uC99D\uAC00"
   baseDescription: 
   baseValue: 10

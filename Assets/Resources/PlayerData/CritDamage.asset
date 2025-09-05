@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e551d2fcec247a04a96a7101944963e5, type: 3}
-  m_Name: CritChance
+  m_Name: CritDamage
   m_EditorClassIdentifier: 
-  statType: 0
+  statType: 3
   upgradeName: "\uCE58\uBA85\uD0C0 \uD655\uB960\uC99D\uAC00"
   baseDescription: 
-  baseValue: 5
-  increasePerLevel: 5
-  baseCost: 30
-  costIncreasePerLevel: 1.7
+  baseValue: 10
+  increasePerLevel: 10
+  baseCost: 100
+  costIncreasePerLevel: 2
   maxLevel: 0

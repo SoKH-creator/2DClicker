@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e551d2fcec247a04a96a7101944963e5, type: 3}
-  m_Name: AutoAttackSpeed
+  m_Name: CritChance
   m_EditorClassIdentifier: 
-  statType: 0
-  upgradeName: "\uACF5\uACA9\uC18D\uB3C4 \uC99D\uAC00"
+  statType: 2
+  upgradeName: "\uCE58\uBA85\uD0C0 \uD655\uB960\uC99D\uAC00"
   baseDescription: 
-  baseValue: 1
-  increasePerLevel: 0.5
-  baseCost: 50
-  costIncreasePerLevel: 1.5
+  baseValue: 5
+  increasePerLevel: 5
+  baseCost: 30
+  costIncreasePerLevel: 1.7
   maxLevel: 0

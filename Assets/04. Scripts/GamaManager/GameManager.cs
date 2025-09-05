@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     //public Temp_WeaponModel weaponModel;
     public WeaponRuntime weaponRuntime;
-    public PlayerData playerData;
     public GameObject warningPanel;
     public TextMeshProUGUI warningText;
 
@@ -61,17 +60,17 @@ public class GameManager : MonoBehaviour
     
     public void UpdateGoldUI()
     {
-        goldText.text = $"Gold : {playerData.gold}";
+        goldText.text = $"Gold : {gold}";
     }
     public void TryUseGold(int amount)
     {
-        if (playerData.gold < amount)
+        if (gold < amount)
         {
             StartCoroutine(ShowWarning("골드가 부족합니다!"));
         }
         else
         {
-            playerData.gold -= amount;
+            gold -= amount;
             UpdateGoldUI();
         }
     }
@@ -103,7 +102,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("호출됨");
         finalStats = new FinalStats();
-        finalStats.Calculate(playerData, weaponRuntime);
+        finalStats.Calculate(statHandler, weaponRuntime);
 
         // 확인용 로그
         Debug.Log($"최종 공격력: {finalStats.finalAttack}");
