@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,11 +9,14 @@ public class EnemyView : MonoBehaviour
     public Image hpBar;
     public TextMeshProUGUI hpText;
 
-    private EnemyModel model;
+    [Header("Damage")]
+    [SerializeField] private int clickDamage = 1;
+
+    public EnemyModel model;
 
     public void Bind(EnemyModel model)
     {
-        if(this.model != null)
+        if (this.model != null)
         {
             this.model.OnDamaged -= UpdateUI;
             this.model.OnDead -= Die;
@@ -29,12 +30,17 @@ public class EnemyView : MonoBehaviour
         UpdateUI();
     }
 
+    // StageManager에서 주입
+    public void SetClickDamage(int dmg)
+    {
+        clickDamage = Mathf.Max(1, dmg);
+    }
+
     private void OnMouseDown()
     {
-        if (model != null)
-            return;
-        model.TakeDamage(10);
-
+        // 버그 수정: model이 없으면 리턴(== null 체크)
+        if (model == null) return;
+        model.TakeDamage(clickDamage);
     }
 
     private void UpdateUI()
@@ -55,7 +61,6 @@ public class EnemyView : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Enemy Died");
         Destroy(gameObject);
     }
 
@@ -68,10 +73,10 @@ public class EnemyView : MonoBehaviour
         }
     }
 
-    public void TakeDamege(int amount) // 외부에서 버튼같은걸로 때리는 메서드
+    // 외부에서 버튼 액션으로 호출 가능
+    public void TakeDamage(int amount)
     {
-        if (model != null)
-            return;
-        model.TakeDamage(amount);
+        if (model == null) return; 
+        model.TakeDamage(Mathf.Max(1, amount));
     }
 }

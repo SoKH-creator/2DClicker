@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statType: 2
   upgradeName: "\uCE58\uBA85\uD0C0 \uD655\uB960\uC99D\uAC00"
-  baseDescription: 0
+  baseDescription: 
   baseValue: 5
   increasePerLevel: 5
   baseCost: 30
