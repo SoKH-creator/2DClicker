@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     public AudioClip mainBGM;
 
     public FinalStats finalStats;
+    public GameObject individualStatUI; // 프리팹 연결
+    public Transform uiParent; // 어디에 붙일지 부모 오브젝트
+    public StatHandler statHandler; // StatHandler 오브젝트
+    public UpgradeData[] upgradeDatas; // 업그레이드 대상 정보들
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +34,7 @@ public class GameManager : MonoBehaviour
         PlayBGM(titleBGM);
         CalculateFinalStats();
         volumeSlider.onValueChanged.AddListener(SetBGMVolume);
+        CreateUpgradeUI();
     }
     public void UpdateGoldUI()
     {
@@ -82,6 +87,17 @@ public class GameManager : MonoBehaviour
         Debug.Log($"치명타 확률: {finalStats.finalCritChance}");
         Debug.Log($"치명타 데미지: {finalStats.finalCritDamage}");
     }
+    public void CreateUpgradeUI()
+    {
+        foreach (var data in upgradeDatas)
+        {
+            GameObject go = Instantiate(individualStatUI, uiParent);
+            UpgradeUI ui = go.GetComponent<UpgradeUI>();
+            ui.statHandler = statHandler;
+            ui.upgradeData = data;
+        }
+    }
+
     public void SaveGame()
     {
         // GameSave 구조와 연결 예정

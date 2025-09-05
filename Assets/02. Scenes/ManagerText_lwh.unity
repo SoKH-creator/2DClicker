@@ -492,7 +492,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: goldText
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1008,7 +1008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1671204443
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1109,6 +1109,15 @@ MonoBehaviour:
   titleBGM: {fileID: 8300000, guid: 89f935015cc98724a862a586326fdf21, type: 3}
   mainBGM: {fileID: 8300000, guid: 89f935015cc98724a862a586326fdf21, type: 3}
   finalStats: {fileID: 0}
+  individualStatUI: {fileID: 0}
+  uiParent: {fileID: 209845202}
+  statHandler: {fileID: 0}
+  upgradeDatas:
+  - {fileID: 11400000, guid: 53caa83f8b29c62489361500fc311db4, type: 2}
+  - {fileID: 11400000, guid: a5652a2a40b4e0c4c8fc0eada61f7261, type: 2}
+  - {fileID: 11400000, guid: 3d32b2b832b00f944b48f41e3f87b0f0, type: 2}
+  - {fileID: 11400000, guid: e93ef3063e152ea4f86b6d0f28f22d07, type: 2}
+  - {fileID: 11400000, guid: de29d1205dd0c1c45823a4c39ff61e5b, type: 2}
 --- !u!4 &1930558841
 Transform:
   m_ObjectHideFlags: 0
