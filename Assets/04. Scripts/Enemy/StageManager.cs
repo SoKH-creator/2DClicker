@@ -142,7 +142,7 @@ public class StageManager : MonoBehaviour
 
         _currentEnemyModel.OnDead += OnEnemyDead;
 
-        // ★ 스폰될 때만 InfoGroup을 부드럽게 보여주기
+        // 스폰될 때만 InfoGroup을 부드럽게 보여주기
         if (infoGroup != null)
         {
             SetGroupVisible(false, instant: true); // 먼저 숨기고

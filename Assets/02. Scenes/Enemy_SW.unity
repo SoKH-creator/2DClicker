@@ -608,6 +608,7 @@ MonoBehaviour:
   enemyScaleRange: {x: 0.8, y: 1.4}
   smallCutoff: 0.95
   bigCutoff: 1.25
+  _currentEnemyView: {fileID: 0}
 --- !u!4 &979387859
 Transform:
   m_ObjectHideFlags: 0

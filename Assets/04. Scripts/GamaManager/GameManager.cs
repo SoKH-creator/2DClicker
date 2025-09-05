@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -9,8 +10,11 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI goldText;
+    public int gold = 30;
+    public int exp = 30;
 
-    public Temp_WeaponModel weaponModel;
+    //public Temp_WeaponModel weaponModel;
+    public WeaponRuntime weaponRuntime;
     public PlayerData playerData;
     public GameObject warningPanel;
     public TextMeshProUGUI warningText;
@@ -35,6 +39,8 @@ public class GameManager : MonoBehaviour
         CalculateFinalStats();
         volumeSlider.onValueChanged.AddListener(SetBGMVolume);
         CreateUpgradeUI();
+        weaponRuntime = new WeaponRuntime();
+        weaponRuntime.Init();
     }
     public void UpdateGoldUI()
     {
@@ -80,18 +86,18 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("호출됨");
         finalStats = new FinalStats();
-        finalStats.Calculate(playerData, weaponModel);
+        finalStats.Calculate(playerData, weaponRuntime);
 
         // 확인용 로그
         Debug.Log($"최종 공격력: {finalStats.finalAttack}");
         Debug.Log($"치명타 확률: {finalStats.finalCritChance}");
-        Debug.Log($"치명타 데미지: {finalStats.finalCritDamage}");
     }
     public void CreateUpgradeUI()
     {
         foreach (var data in upgradeDatas)
         {
             GameObject go = Instantiate(individualStatUI, uiParent);
+            go.SetActive(true);
             UpgradeUI ui = go.GetComponent<UpgradeUI>();
             ui.statHandler = statHandler;
             ui.upgradeData = data;
