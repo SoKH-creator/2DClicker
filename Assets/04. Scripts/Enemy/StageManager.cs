@@ -3,7 +3,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 [DisallowMultipleComponent]
 public class StageManager : MonoBehaviour
@@ -18,8 +17,8 @@ public class StageManager : MonoBehaviour
     public TextMeshProUGUI stageText;
     public TextMeshProUGUI enemyNameText;
 
-    [Header("UI Group Appear")]
-    public CanvasGroup infoGroup;
+    [Header("Stage UI Appear (CanvasGroup)")]
+    public CanvasGroup stageUI;        // ← infoGroup → stageUI 로 변경
     public float showDelay = 0.15f;
     public float fadeDuration = 0.25f;
     public bool hideBetweenSpawns = true;
@@ -59,7 +58,8 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        if (infoGroup != null) SetGroupVisible(false, instant: true);
+        // 시작 시 UI 감추기
+        if (stageUI != null) SetStageUIVisible(false, instant: true);
         UpdateStageUI();
         SpawnEnemy();
     }
@@ -67,7 +67,7 @@ public class StageManager : MonoBehaviour
     void UpdateStageUI()
     {
         if (stageText != null)
-            stageText.text = $"Stage {currentStage} / 10";
+            stageText.text = $"Stage {currentStage} / {maxStagePerCycle}";
     }
 
     void SpawnEnemy()
@@ -153,11 +153,11 @@ public class StageManager : MonoBehaviour
 
         _currentEnemyModel.OnDead += OnEnemyDead;
 
-        // 스폰될 때만 InfoGroup을 부드럽게 보여주기
-        if (infoGroup != null)
+        // 스폰될 때만 StageUI를 부드럽게 보여주기
+        if (stageUI != null)
         {
-            SetGroupVisible(false, instant: true); // 먼저 숨기고
-            StartCoroutine(ShowInfoRoutine());
+            SetStageUIVisible(false, instant: true); // 먼저 숨기고
+            StartCoroutine(ShowStageUIRoutine());
         }
     }
 
@@ -165,7 +165,7 @@ public class StageManager : MonoBehaviour
     {
         if (_currentEnemyModel != null) _currentEnemyModel.OnDead -= OnEnemyDead;
 
-        // --- 보상 지급 (GameManager: public int gold, exp) ---
+        // --- 보상 지급 ---
         var data = _currentEnemyModel?.data;
         if (data != null && GameManager.Instance != null)
         {
@@ -174,15 +174,14 @@ public class StageManager : MonoBehaviour
             int gMax = Mathf.Max(gMin, data.goldRange.y);
             int goldGain = UnityEngine.Random.Range(gMin, gMax + 1);
             GameManager.Instance.gold += goldGain;
+            GameManager.Instance.UpdateGoldUI();
 
-             // 무기강화 EXP
-             if (data.enhanceExp > 0)
+            // 무기강화 EXP
+            if (data.enhanceExp > 0)
+            {
                 GameManager.Instance.exp += data.enhanceExp;
-
-            // 골드 UI가 있으면 갱신 (없으면 이 줄은 주석 처리해도 됨)
-             GameManager.Instance.UpdateGoldUI();
-            // EXP UI 갱신 메서드가 있으면 여기서 호출
-            // GameManager.Instance.UpdateExpUI();
+                // GameManager.Instance.UpdateExpUI(); // 만들었으면 호출
+            }
         }
         // -----------------------------------------------------
 
@@ -195,8 +194,8 @@ public class StageManager : MonoBehaviour
             phaseIndex++;
         }
 
-        if (hideBetweenSpawns && infoGroup != null)
-            SetGroupVisible(false, instant: false);
+        if (hideBetweenSpawns && stageUI != null)
+            SetStageUIVisible(false, instant: false);
 
         UpdateStageUI();
         SpawnEnemy();
@@ -207,41 +206,41 @@ public class StageManager : MonoBehaviour
         if (_currentEnemyModel != null) _currentEnemyModel.OnDead -= OnEnemyDead;
     }
 
-    // ---------- UI 페이드 유틸 ----------
-    void SetGroupVisible(bool visible, bool instant = false)
+    // ---------- Stage UI 페이드 유틸 ----------
+    void SetStageUIVisible(bool visible, bool instant = false)
     {
-        if (infoGroup == null) return;
+        if (stageUI == null) return;
 
-        infoGroup.interactable = visible;
-        infoGroup.blocksRaycasts = visible;
+        stageUI.interactable = visible;
+        stageUI.blocksRaycasts = visible;
 
         if (instant)
         {
-            infoGroup.alpha = visible ? 1f : 0f;
+            stageUI.alpha = visible ? 1f : 0f;
         }
         else
         {
-            StopCoroutine(nameof(FadeGroup));
-            StartCoroutine(FadeGroup(visible ? 1f : 0f, fadeDuration));
+            StopCoroutine(nameof(FadeStageUI));
+            StartCoroutine(FadeStageUI(visible ? 1f : 0f, fadeDuration));
         }
     }
 
-    IEnumerator ShowInfoRoutine()
+    IEnumerator ShowStageUIRoutine()
     {
         if (showDelay > 0f) yield return new WaitForSeconds(showDelay);
-        SetGroupVisible(true, instant: false);
+        SetStageUIVisible(true, instant: false);
     }
 
-    IEnumerator FadeGroup(float target, float duration)
+    IEnumerator FadeStageUI(float target, float duration)
     {
-        float start = infoGroup.alpha;
+        float start = stageUI.alpha;
         float t = 0f;
         while (t < duration)
         {
             t += Time.deltaTime;
-            infoGroup.alpha = Mathf.Lerp(start, target, t / duration);
+            stageUI.alpha = Mathf.Lerp(start, target, t / duration);
             yield return null;
         }
-        infoGroup.alpha = target;
+        stageUI.alpha = target;
     }
 }
