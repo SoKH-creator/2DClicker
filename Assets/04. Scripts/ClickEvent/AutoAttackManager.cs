@@ -75,6 +75,7 @@ public class AutoAttackManager : MonoBehaviour
                 Debug.Log($"자동 공격! 몬스터에게 {finalDamage}만큼의 피해를 입혔습니다.");
             }
 
+
             // 설정된 간격만큼 대기.
             yield return new WaitForSeconds(interval);
         }

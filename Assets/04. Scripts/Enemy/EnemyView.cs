@@ -12,7 +12,7 @@ public class EnemyView : MonoBehaviour
     [Header("Damage")]
     [SerializeField] private int clickDamage = 1;
 
-    private EnemyModel model;
+    public EnemyModel model;
 
     public void Bind(EnemyModel model)
     {

@@ -38,8 +38,11 @@ public class StageManager : MonoBehaviour
     public float smallCutoff = 0.95f;
     public float bigCutoff = 1.25f;
 
-    private EnemyModel _currentEnemyModel;
+    public EnemyModel _currentEnemyModel;
     public EnemyModel currentEnemyModel => _currentEnemyModel;
+
+    public EnemyView _currentEnemyView;
+    public EnemyView currentEnemyView => _currentEnemyView;
 
     void Awake()
     {
@@ -133,6 +136,7 @@ public class StageManager : MonoBehaviour
         }
 
         _currentEnemyModel = new EnemyModel(runtimeData);
+        _currentEnemyView = view;
         view.Bind(_currentEnemyModel);
         // view.SetClickDamage(clickDamage); // 클릭커 스크립트로 넘길 예정
 
