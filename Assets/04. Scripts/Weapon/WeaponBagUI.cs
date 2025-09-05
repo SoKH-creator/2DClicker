@@ -24,7 +24,7 @@ public class WeaponBagUI : MonoBehaviour
     private void OnEnable()
     {
         // runtime 연결
-        _runtime = Temp_GameManager.Instance.weaponRuntime;
+        _runtime = GameManager.Instance.weaponRuntime;
 
         // 데이터베이스 초기화
         if (WeaponDatabase.Dict == null)

@@ -59,7 +59,7 @@ public class WeaponSlotUI : MonoBehaviour
             upgradeBtn.SetActive(false);
             equipBtn.SetActive(false);
         }
-        else if (Temp_GameManager.Instance.weaponRuntime.equippedId == _model.Data.id) // 무기 장착 상태
+        else if (GameManager.Instance.weaponRuntime.equippedId == _model.Data.id) // 무기 장착 상태
         {
             unlockBtn.SetActive(false);
             upgradeBtn.SetActive(true);
@@ -76,17 +76,17 @@ public class WeaponSlotUI : MonoBehaviour
     // -----버튼 기능들----
     public void OnEquipBtn()
     {
-        Temp_GameManager.Instance.weaponRuntime.TryEquip(id);
+        GameManager.Instance.weaponRuntime.TryEquip(id);
         Refresh();
     }
     public void OnUnlock()
     {
-        if (_model.TryUnlock(ref Temp_GameManager.Instance.exp))
+        if (_model.TryUnlock(ref GameManager.Instance.exp))
             Refresh();
     }
     public void OnUpgrade()
     {
-        if (_model.TryUpgrade(ref Temp_GameManager.Instance.exp))
+        if (_model.TryUpgrade(ref GameManager.Instance.exp))
             Refresh();
     }
 
