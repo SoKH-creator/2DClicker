@@ -7,6 +7,21 @@ using UnityEngine;
 public class Temp_GameManager : MonoBehaviour
 {
     public WeaponRuntime weaponRuntime;
+    public int gold = 10000;
+    public int exp = 10000;
+
+    private static Temp_GameManager instance = null;
+    public static Temp_GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                return null;
+            }
+            return instance;
+        }
+    }
 
     [Header("Save Settings")]
     [SerializeField] private string fileName = "weaponsave.json";
@@ -15,7 +30,18 @@ public class Temp_GameManager : MonoBehaviour
 
     private void Awake()
     {
-        weaponRuntime = new WeaponRuntime();
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
+
+            weaponRuntime = new WeaponRuntime();
         weaponRuntime.Init();
 
         LoadAndApply();

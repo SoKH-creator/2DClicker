@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class WeaponRuntime
     private Dictionary<string, WeaponModel> _models;
     public Dictionary<string, WeaponModel> Models => _models;
 
+    // 장착 변경 관리
+    public event Action OnEquippedChanged;
+
     public void Init()
     {
         WeaponDatabase.Init();
@@ -21,8 +25,8 @@ public class WeaponRuntime
         }
 
         // set basic weapon if no equipped weapon
-        if (equippedId == "")
-            equippedId = "Axe01";
+        if (string.IsNullOrEmpty(equippedId))
+            TryEquip("Axe01");
     }
     public void Apply(WeaponsSave save)
     {
@@ -41,16 +45,19 @@ public class WeaponRuntime
         }
         return save;
     }
-    public bool TryEquip(string id) 
+    public bool TryEquip(string id)
     {
-        if (_models[id].State.unlocked)
-        {
+        // 잠금 해제된 것만 장착
+        if (!_models[id].State.unlocked)
             return false;
-        }
-        else
-        {
-            equippedId = id;
+
+        // 이미 해당 무기를 장착 중이면 패스
+        if (id == equippedId)
             return true;
-        }
+
+        equippedId = id;
+        OnEquippedChanged?.Invoke(); // 장착 변경 이벤트 호출
+        return true;
     }
+
 }
