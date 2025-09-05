@@ -1,8 +1,9 @@
 using System.Linq;
-using System.Collections;                 
+using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;                     
+using UnityEngine.UI;
+using System;
 
 [DisallowMultipleComponent]
 public class StageManager : MonoBehaviour
@@ -17,11 +18,11 @@ public class StageManager : MonoBehaviour
     public TextMeshProUGUI stageText;
     public TextMeshProUGUI enemyNameText;
 
-    [Header("UI Group Appear")]          
-    public CanvasGroup infoGroup;         
-    public float showDelay = 0.15f;       
-    public float fadeDuration = 0.25f;    
-    public bool hideBetweenSpawns = true; 
+    [Header("UI Group Appear")]
+    public CanvasGroup infoGroup;
+    public float showDelay = 0.15f;
+    public float fadeDuration = 0.25f;
+    public bool hideBetweenSpawns = true;
 
     [Header("Enemy")]
     public EnemyData[] enemyPool;
@@ -58,9 +59,7 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        // 시작 시 UI 감추기
         if (infoGroup != null) SetGroupVisible(false, instant: true);
-
         UpdateStageUI();
         SpawnEnemy();
     }
@@ -75,12 +74,24 @@ public class StageManager : MonoBehaviour
     {
         if (enemyPrefab == null) return;
 
-        // 후보 찾기
+        // 안전 가드: 풀 비었으면 종료
+        if (enemyPool == null || enemyPool.Length == 0)
+        {
+            Debug.LogError("StageManager: enemyPool이 비었습니다.");
+            return;
+        }
+
+        // 후보 찾기 (phase 우선 → 완화 → 전체)
         var candidates = enemyPool.Where(e => e != null && e.appearPhase == phaseIndex).ToList();
         if (candidates.Count == 0) candidates = enemyPool.Where(e => e != null && e.appearPhase <= phaseIndex).ToList();
         if (candidates.Count == 0) candidates = enemyPool.Where(e => e != null).ToList();
+        if (candidates.Count == 0)
+        {
+            Debug.LogError("StageManager: 유효한 EnemyData가 없습니다.");
+            return;
+        }
 
-        var selectedData = candidates[Random.Range(0, candidates.Count)];
+        var selectedData = candidates[UnityEngine.Random.Range(0, candidates.Count)];
 
         int globalStageIndex = phaseIndex * maxStagePerCycle + currentStage;
         int fallbackHP = Mathf.Max(1,
@@ -101,7 +112,7 @@ public class StageManager : MonoBehaviour
         // 스폰 위치
         Vector3 pos = spawnPoints
             ? (spawnPoints.childCount > 0
-                ? spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount)).position
+                ? spawnPoints.GetChild(UnityEngine.Random.Range(0, spawnPoints.childCount)).position
                 : spawnPoints.position)
             : Vector3.zero;
 
@@ -113,7 +124,7 @@ public class StageManager : MonoBehaviour
         if (sr && runtimeData.icon) sr.sprite = runtimeData.icon;
 
         // 랜덤 스케일
-        float s = Random.Range(enemyScaleRange.x, enemyScaleRange.y);
+        float s = UnityEngine.Random.Range(enemyScaleRange.x, enemyScaleRange.y);
         go.transform.localScale = Vector3.one * s;
 
         // 이름 덮어쓰기
@@ -142,7 +153,7 @@ public class StageManager : MonoBehaviour
 
         _currentEnemyModel.OnDead += OnEnemyDead;
 
-        // ★ 스폰될 때만 InfoGroup을 부드럽게 보여주기
+        // 스폰될 때만 InfoGroup을 부드럽게 보여주기
         if (infoGroup != null)
         {
             SetGroupVisible(false, instant: true); // 먼저 숨기고
@@ -154,6 +165,27 @@ public class StageManager : MonoBehaviour
     {
         if (_currentEnemyModel != null) _currentEnemyModel.OnDead -= OnEnemyDead;
 
+        // --- 보상 지급 (GameManager: public int gold, exp) ---
+        //var data = _currentEnemyModel?.data;
+        //if (data != null && GameManager.Instance != null)
+        //{
+        //    // 골드
+        //    int gMin = Mathf.Max(0, data.goldRange.x);
+        //    int gMax = Mathf.Max(gMin, data.goldRange.y);
+        //    int goldGain = UnityEngine.Random.Range(gMin, gMax + 1);
+        //    // GameManager.Instance.gold += goldGain;
+
+        //    // 무기강화 EXP
+        //    // if (data.enhanceExp > 0)
+        //         // GameManager.Instance.exp += data.enhanceExp;
+
+        //    // 골드 UI가 있으면 갱신 (없으면 이 줄은 주석 처리해도 됨)
+        //    // GameManager.Instance.UpdateGoldUI();
+        //    // EXP UI 갱신 메서드가 있으면 여기서 호출
+        //    // GameManager.Instance.UpdateExpUI();
+        //}
+        // -----------------------------------------------------
+
         killCount++;
         currentStage++;
 
@@ -163,7 +195,6 @@ public class StageManager : MonoBehaviour
             phaseIndex++;
         }
 
-        // 적이 죽으면 잠깐 숨기기(다음 스폰에서 다시 나타남)
         if (hideBetweenSpawns && infoGroup != null)
             SetGroupVisible(false, instant: false);
 
@@ -177,7 +208,6 @@ public class StageManager : MonoBehaviour
     }
 
     // ---------- UI 페이드 유틸 ----------
-
     void SetGroupVisible(bool visible, bool instant = false)
     {
         if (infoGroup == null) return;
