@@ -9,7 +9,7 @@ public class StatHandler : MonoBehaviour
     private Dictionary<StatType, int> upgradeValue = new Dictionary<StatType, int>();
 
     // 골드 변수 통합
-    private int _gold = 100; // 초기 골드 (테스트용)
+    private int _gold = 1000; // 초기 골드 (테스트용)
     public int gold
     {
         get => _gold;
