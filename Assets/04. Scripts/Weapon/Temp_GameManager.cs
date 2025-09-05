@@ -7,6 +7,8 @@ using UnityEngine;
 public class Temp_GameManager : MonoBehaviour
 {
     public WeaponRuntime weaponRuntime;
+    public int gold = 10000;
+    public int exp = 10000;
 
     private static Temp_GameManager instance = null;
     public static Temp_GameManager Instance

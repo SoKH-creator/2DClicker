@@ -14,7 +14,8 @@ public class WeaponSlotUI : MonoBehaviour
     [Header("UI texts")]
     public TextMeshProUGUI weaponNameLv;
     public TextMeshProUGUI weaponDesc;
-    public TextMeshProUGUI exp;
+    public TextMeshProUGUI unlockExp;
+    public TextMeshProUGUI upgradeExp;
 
     [Header("Buttons")]
     public GameObject unlockBtn;
@@ -31,24 +32,26 @@ public class WeaponSlotUI : MonoBehaviour
     public void Bind(WeaponModel souce) 
     {
         // 이전 구독 있으면 취소
-        if (_model != null) _model.OnChanged -= Refresh;
+        if (_model != null)
+            _model.OnChanged -= Refresh;
 
         _model = souce;
 
         // 활성 상태일 때만 구독
         if (isActiveAndEnabled)
             _model.OnChanged += Refresh;
-    
+        
         Refresh();
     }
-    void Refresh()
+    public void Refresh()
     {
         icon.sprite = _model.Data.icon;
         id = _model.Data.id;
         weaponNameLv.text = _model.Data.weaponName + " Lv." + _model.State.level.ToString();
         weaponDesc.text = "+ 공격력 " + _model.GetAttack().ToString() + "%\n" +
             "+ 치명타 확률 " + _model.GetCrit().ToString() + "%";
-        exp.text = _model.GetRequiredExp().ToString();
+        unlockExp.text = _model.GetRequiredExp().ToString();
+        upgradeExp.text = _model.GetRequiredExp().ToString();
 
         if (!_model.State.unlocked) // 무기 잠금 상태
         {
@@ -71,17 +74,20 @@ public class WeaponSlotUI : MonoBehaviour
     }
 
     // -----버튼 기능들----
-    private void OnEquipBtn()
+    public void OnEquipBtn()
     {
         Temp_GameManager.Instance.weaponRuntime.TryEquip(id);
+        Refresh();
     }
-    private void OnUnlock()
+    public void OnUnlock()
     {
-        if (_model.TryUnlock(ref exp)) Refresh();
+        if (_model.TryUnlock(ref Temp_GameManager.Instance.exp))
+            Refresh();
     }
-    private void OnUpgrade()
+    public void OnUpgrade()
     {
-        if (_model.TryUnlock(ref exp)) Refresh();
+        if (_model.TryUpgrade(ref Temp_GameManager.Instance.exp))
+            Refresh();
     }
 
 }
