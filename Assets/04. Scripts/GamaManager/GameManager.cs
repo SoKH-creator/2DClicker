@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
             UpdateGoldUI();
         }
     }
+
     public void WarningClose()
     {
         if (warningPanel != null)

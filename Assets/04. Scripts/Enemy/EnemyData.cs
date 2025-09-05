@@ -17,7 +17,11 @@ public class EnemyData : ScriptableObject
     public List<StageHP> hpTable = new();
 
     [Header("Spawn Rules (Cycle)")]
-    public int appearPhase = 0; 
+    public int appearPhase = 0;
+
+    [Header("Reward")]
+    public Vector2Int goldRange = new Vector2Int(1, 3);
+    public int enhanceExp = 1;
 
     public int GetHPForStage(int stage, int fallback)
     {
