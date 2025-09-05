@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponBagUI : MonoBehaviour
+public class WeaponSlotListUI : MonoBehaviour
 {
     public GameObject slotPrefab;
     public Transform parentTransform;
