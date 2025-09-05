@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public int gold = 30;
     public int exp = 30;
 
+    private static GameManager instance = null;
+
     //public Temp_WeaponModel weaponModel;
     public WeaponRuntime weaponRuntime;
     public PlayerData playerData;
@@ -31,7 +33,21 @@ public class GameManager : MonoBehaviour
     public Transform uiParent; // 어디에 붙일지 부모 오브젝트
     public StatHandler statHandler; // StatHandler 오브젝트
     public UpgradeData[] upgradeDatas; // 업그레이드 대상 정보들
+    public static GameManager Instance { get { return instance; } }
+
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         UpdateGoldUI();
@@ -42,6 +58,7 @@ public class GameManager : MonoBehaviour
         weaponRuntime = new WeaponRuntime();
         weaponRuntime.Init();
     }
+    
     public void UpdateGoldUI()
     {
         goldText.text = $"Gold : {playerData.gold}";
