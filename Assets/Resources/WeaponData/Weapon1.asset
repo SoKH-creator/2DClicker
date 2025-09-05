@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Axe01
   weaponName: "\uB3C4\uB07C"
-  icon: {fileID: -1616991933249458334, guid: 8e38b67387d8caa4fa6cb39e65b08a28, type: 3}
-  baseAttack: 4
-  baseCritRate: 10
-  requiredExp: 0
-  deltaAttack: 1
-  deltaCritRate: 5
-  deltaRequiredExp: 0
+  icon: {fileID: -4989476300770746461, guid: 9bdb1c98c9900da41bc899019019172d, type: 3}
+  baseAttack: 5
+  baseCritRate: 5
+  requiredExp: 1
+  deltaAttack: 5
+  deltaCritRate: 1
+  deltaRequiredExp: 1

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponModel : MonoBehaviour
+public class Temp_WeaponModel : MonoBehaviour
 {
     public float baseAttack = 5f;
     public int level = 3;

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67ed71006904e47409cd067b4fb147ca, type: 3}
-  m_Name: Weapon3
+  m_Name: Weapon5
   m_EditorClassIdentifier: 
-  id: Harpe01
-  weaponName: "\uD558\uB974\uD398"
-  icon: {fileID: -1700892053915081011, guid: 80e0d608ebd3a3e40b56afc187937e80, type: 3}
-  baseAttack: 100
-  baseCritRate: 15
-  requiredExp: 100
+  id: Sword02
+  weaponName: "\uD50C\uB791\uBCA0\uB974\uC8FC"
+  icon: {fileID: -8336417904958914870, guid: 6942bc247a277b14d8658572eacd09f8, type: 3}
+  baseAttack: 10000
+  baseCritRate: 30
+  requiredExp: 1000
   deltaAttack: 1
-  deltaCritRate: 5
-  deltaRequiredExp: 100
+  deltaCritRate: 10
+  deltaRequiredExp: 1000

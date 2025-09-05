@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponActor
+public class WeaponModel
 {
     private WeaponData _data;
     private WeaponState _state;
@@ -13,17 +13,19 @@ public class WeaponActor
 
     public event Action OnChanged;
 
-    public WeaponActor(string id)
+    public WeaponModel(string id)
     {
         _data = WeaponDatabase.GetWeaponData(id);
         _state = new WeaponState(id);
     }
+
     public bool TryUnlock(ref int exp)
     {
         if (exp >= _data.requiredExp)
         {
             exp -= _data.requiredExp;
             _data.requiredExp += _data.deltaRequiredExp;
+            _state.unlocked = true;
             OnChanged?.Invoke();
             return true;
         }
@@ -43,20 +45,7 @@ public class WeaponActor
         }
         else { return false; }
     }
-    public void Unlock(ref int exp) 
-    {
-        if (exp >= _data.requiredExp)
-        {
-            exp -= _data.requiredExp;
-            OnChanged?.Invoke();
-            _state.unlocked = true;
-        }
-        else { }
-    }
 
-    public Sprite GetIcon() { return _data.icon; }
-    public string GetName() { return _data.name; }
-    public int GetLevel() { return _state.level; }
     public float GetAttack()
     {
         float atk = _data.baseAttack;
