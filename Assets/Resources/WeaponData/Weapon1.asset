@@ -15,9 +15,9 @@ MonoBehaviour:
   id: Axe01
   weaponName: "\uB3C4\uB07C"
   icon: {fileID: -4989476300770746461, guid: 9bdb1c98c9900da41bc899019019172d, type: 3}
-  baseAttack: 5
+  baseAttack: 1
   baseCritRate: 5
-  requiredExp: 1
-  deltaAttack: 5
+  requiredExp: 5
+  deltaAttack: 2
   deltaCritRate: 1
   deltaRequiredExp: 1
