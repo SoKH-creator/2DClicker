@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -13,8 +14,27 @@ public class GameManager : MonoBehaviour
     [Header("Gold and Exp")]
     public TextMeshProUGUI expText;
     public TextMeshProUGUI goldText;
-    public int gold = 30;
-    public int exp = 30;
+    [SerializeField] private int gold = 30;
+    [SerializeField] private int exp = 30;
+
+    public int Gold 
+    {
+        get { return gold; }
+        set 
+        { 
+            gold = value;
+            OnGoldChanged.Invoke();
+        }
+    }
+    public int Exp
+    {
+        get { return exp; }
+        set
+        {
+            exp = value;
+            OnExpChanged.Invoke();
+        }
+    }
 
     [Header("Warning Panel")]
     public WeaponRuntime weaponRuntime;
@@ -31,11 +51,13 @@ public class GameManager : MonoBehaviour
     [Header("MonoB")]
     public FinalStats finalStats;
     public StatHandler statHandler; // StatHandler 오브젝트
+
+    public event Action OnGoldChanged;
+    public event Action OnExpChanged;
     
     private static GameManager instance = null;
     public static GameManager Instance { get { return instance; } }
 
-    // Start is called before the first frame update
     private void Awake()
     {
         if(instance == null)
@@ -57,11 +79,11 @@ public class GameManager : MonoBehaviour
         UpdateGoldUI();
         UpdateExpUI();
 
-        //PlayBGM(titleBGM);
+        PlayBGM(titleBGM);
 
         CalculateFinalStats();
 
-        //volumeSlider.onValueChanged.AddListener(SetBGMVolume);
+        volumeSlider.onValueChanged.AddListener(SetBGMVolume);
     }
     
     public void UpdateGoldUI()
@@ -119,7 +141,12 @@ public class GameManager : MonoBehaviour
 
     public void SetBGMVolume(float value)
     {
-        audioMixer.SetFloat("BGMVolume", Mathf.Log10(value) * 20);
+        float min = Mathf.Pow(10f, -80f / 20f);
+        float max = Mathf.Pow(10f, 6f / 20f);
+        float amp = Mathf.Lerp(min, max, value);
+        float dB = Mathf.Log10(amp) * 20f;
+
+        audioMixer.SetFloat("Master", dB);
     }
     public void CalculateFinalStats()
     {

@@ -81,12 +81,12 @@ public class WeaponSlotUI : MonoBehaviour
     }
     public void OnUnlock()
     {
-        if (_model.TryUnlock(ref GameManager.Instance.exp))
+        if (_model.TryUnlock(ref GameManager.Instance.Exp))
             Refresh();
     }
     public void OnUpgrade()
     {
-        if (_model.TryUpgrade(ref GameManager.Instance.exp))
+        if (_model.TryUpgrade(ref GameManager.Instance.Exp))
             Refresh();
     }
 

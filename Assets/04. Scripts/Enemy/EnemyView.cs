@@ -36,12 +36,14 @@ public class EnemyView : MonoBehaviour
         clickDamage = Mathf.Max(1, dmg);
     }
 
+    /*
     private void OnMouseDown()
     {
         // 버그 수정: model이 없으면 리턴(== null 체크)
         if (model == null) return;
         model.TakeDamage(clickDamage);
     }
+    */
 
     private void UpdateUI()
     {
