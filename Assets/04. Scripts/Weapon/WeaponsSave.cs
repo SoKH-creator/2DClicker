@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class WeaponsSave
 {
-    List<WeaponState> weapons;
-    string equippedWeaponID;
+    public List<WeaponState> states;
+    public string equippedWeaponID;
 }

@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponActor : MonoBehaviour
+public class WeaponActor
 {
-    [NonSerialized]
     private WeaponData _data;
     private WeaponState _state;
     
+    public WeaponData Data { get => _data; }
+    public WeaponState State { get => _state; set => _state = value; }
+
     public event Action OnChanged;
 
-    public void Init()
+    public WeaponActor(string id)
     {
-        var db = Resources.Load<WeaponDatabase>("WeaponDatabase");
-        _data = db.GetWeaponData(_state.id);
-
-        _state = new WeaponState(_data.id);
+        _data = WeaponDatabase.GetWeaponData(id);
+        _state = new WeaponState(id);
     }
     public bool TryUnlock(ref int exp)
     {
