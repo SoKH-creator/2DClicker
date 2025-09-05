@@ -10,29 +10,29 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Gold and Exp")]
+    public TextMeshProUGUI expText;
     public TextMeshProUGUI goldText;
     public int gold = 30;
     public int exp = 30;
 
-    private static GameManager instance = null;
-
-    //public Temp_WeaponModel weaponModel;
+    [Header("Warning Panel")]
     public WeaponRuntime weaponRuntime;
     public GameObject warningPanel;
     public TextMeshProUGUI warningText;
 
+    [Header("Audio")]
     public AudioSource bgmSource;
     public AudioMixer audioMixer;
     public Slider volumeSlider;
-
     public AudioClip titleBGM;
     public AudioClip mainBGM;
 
+    [Header("MonoB")]
     public FinalStats finalStats;
-    public GameObject individualStatUI; // 프리팹 연결
-    public Transform uiParent; // 어디에 붙일지 부모 오브젝트
     public StatHandler statHandler; // StatHandler 오브젝트
-    public UpgradeData[] upgradeDatas; // 업그레이드 대상 정보들
+    
+    private static GameManager instance = null;
     public static GameManager Instance { get { return instance; } }
 
     // Start is called before the first frame update
@@ -50,18 +50,23 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        UpdateGoldUI();
-        //PlayBGM(titleBGM);
-        CalculateFinalStats();
-        volumeSlider.onValueChanged.AddListener(SetBGMVolume);
-        CreateUpgradeUI();
         weaponRuntime = new WeaponRuntime();
         weaponRuntime.Init();
+        finalStats.Init();
+
+        UpdateGoldUI();
+        UpdateExpUI();
+
+        //PlayBGM(titleBGM);
+
+        CalculateFinalStats();
+
+        //volumeSlider.onValueChanged.AddListener(SetBGMVolume);
     }
     
     public void UpdateGoldUI()
     {
-        //goldText.text = $"Gold : {gold}";
+        goldText.text = $"{gold}";
     }
     public void TryUseGold(int amount)
     {
@@ -73,6 +78,22 @@ public class GameManager : MonoBehaviour
         {
             gold -= amount;
             UpdateGoldUI();
+        }
+    }
+    public void UpdateExpUI()
+    {
+        expText.text = $"{exp}";
+    }
+    public void TryUseExp(int amount)
+    {
+        if (exp < amount)
+        {
+            StartCoroutine(ShowWarning("경험치가 부족합니다!"));
+        }
+        else
+        {
+            exp -= amount;
+            UpdateExpUI();
         }
     }
 
@@ -102,31 +123,18 @@ public class GameManager : MonoBehaviour
     }
     public void CalculateFinalStats()
     {
-        Debug.Log("호출됨");
-        finalStats = new FinalStats();
+        //Debug.Log("호출됨");
         finalStats.Calculate(statHandler, weaponRuntime);
 
         // 확인용 로그
         Debug.Log($"최종 공격력: {finalStats.finalAttack}");
         Debug.Log($"치명타 확률: {finalStats.finalCritChance}");
     }
-    public void CreateUpgradeUI()
-    {
-        foreach (var data in upgradeDatas)
-        {
-            GameObject go = Instantiate(individualStatUI, uiParent);
-            go.SetActive(true);
-            UpgradeUI ui = go.GetComponent<UpgradeUI>();
-            ui.statHandler = statHandler;
-            ui.upgradeData = data;
-        }
-    }
-
+    
     public void SaveGame()
     {
         // GameSave 구조와 연결 예정
     }
-
     public void LoadGame()
     {
         // 저장된 GameSave 불러오기 예정

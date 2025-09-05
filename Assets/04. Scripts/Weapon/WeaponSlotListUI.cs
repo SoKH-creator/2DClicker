@@ -34,14 +34,19 @@ public class WeaponSlotListUI : MonoBehaviour
         for (int i = parentTransform.childCount - 1; i >= 0; i--)
             Destroy(parentTransform.GetChild(i).gameObject);
 
+        // 리스트 재생성
+        if (_slots == null)
+            _slots = new List<GameObject>();
+        _slots.Clear();
+
         // 슬롯 생성
-        foreach (var data in _runtime.Models)
+        foreach (var kv in _runtime.Models)
         {
             GameObject go = Instantiate(slotPrefab, parentTransform);
             go.SetActive(false); // OnEnable 지연
             
             WeaponSlotUI ui = go.GetComponent<WeaponSlotUI>();
-            ui.Bind(data.Value);
+            ui.Bind(kv.Value);
 
             go.SetActive(true);
             _slots.Add(go);
@@ -57,7 +62,28 @@ public class WeaponSlotListUI : MonoBehaviour
     }
     private void RefreshAllSlots()
     {
-        foreach (var slot in _slots)
-            slot.GetComponent<WeaponSlotUI>().Refresh();
+        if (_slots == null) return;
+
+        for (int i = _slots.Count - 1; i >= 0; i--)
+        {
+            GameObject go = _slots[i];
+
+            // Destroy된 오브젝트 null로 판단
+            if(!go)
+            {
+                _slots.RemoveAt(i);
+                continue;
+            }
+
+            // ui 널 방어
+            WeaponSlotUI ui = go.GetComponent<WeaponSlotUI>();
+            if (!ui)
+            {
+                _slots.RemoveAt(i);
+                continue;
+            }
+
+            ui.Refresh();
+        }
     }
 }

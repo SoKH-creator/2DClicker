@@ -10,23 +10,29 @@ public class WeaponRuntime
 
     private Dictionary<string, WeaponModel> _models;
     public Dictionary<string, WeaponModel> Models => _models;
-
-    // 장착 변경 관리
-    public event Action OnEquippedChanged;
+    
+    public event Action OnEquippedChanged; // 장착 변경 관리
+    public event Action<string> OnAnyModelChanged; // 아무거나 변경 시 (id 알림)
 
     public void Init()
     {
         WeaponDatabase.Init();
         _models = new();
         
-        foreach (var data in WeaponDatabase.Dict)
+        foreach (var kv in WeaponDatabase.Dict)
         {
-            _models[data.Key] = new WeaponModel(data.Key);
+            _models[kv.Key] = new WeaponModel(kv.Key);
+
+            _models[kv.Key].OnChanged += () => OnAnyModelChanged?.Invoke(kv.Key);
         }
 
-        // set basic weapon if no equipped weapon
-        if (string.IsNullOrEmpty(equippedId))
-            TryEquip("Axe01");
+        // 기본 무기 없을 시, 기본 무기 장착
+        string defaultId = "Axe01";
+        if (_models.TryGetValue(defaultId, out WeaponModel model))
+        {
+            model.State.unlocked = true;
+            TryEquip(defaultId);
+        }
     }
     public void Apply(WeaponsSave save)
     {
@@ -56,6 +62,8 @@ public class WeaponRuntime
             return true;
 
         equippedId = id;
+
+        OnAnyModelChanged?.Invoke(id);
         OnEquippedChanged?.Invoke(); // 장착 변경 이벤트 호출
         return true;
     }
