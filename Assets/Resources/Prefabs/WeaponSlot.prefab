@@ -227,7 +227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2878138097610511105
 RectTransform:
   m_ObjectHideFlags: 0
@@ -331,7 +331,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4852574222983889467}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7612536421563445160}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3422297428207514000
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,6 +1117,9 @@ MonoBehaviour:
   weaponNameLv: {fileID: 1148425065834168114}
   weaponDesc: {fileID: 5575123883396431333}
   exp: {fileID: 4654721477274442162}
+  unlockBtn: {fileID: 2365580973554454981}
+  upgradeBtn: {fileID: 3841485997755072876}
+  equipBtn: {fileID: 8171215720135805253}
 --- !u!1 &7816167807928084454
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,7 +1348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4879000988416179597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1435,7 +1450,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8834149410544325086}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7612536421563445160}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8315119433048116253
 GameObject:
   m_ObjectHideFlags: 0

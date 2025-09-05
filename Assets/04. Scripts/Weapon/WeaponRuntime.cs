@@ -45,12 +45,12 @@ public class WeaponRuntime
     {
         if (_models[id].State.unlocked)
         {
-            return false;
+            equippedId = id;
+            return true;
         }
         else
         {
-            equippedId = id;
-            return true;
+            return false;
         }
     }
 }
