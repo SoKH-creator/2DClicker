@@ -67,7 +67,7 @@ public class StageManager : MonoBehaviour
     void UpdateStageUI()
     {
         if (stageText != null)
-            stageText.text = $"Stage {currentStage}";
+            stageText.text = $"Stage {currentStage} / 10";
     }
 
     void SpawnEnemy()
@@ -166,24 +166,24 @@ public class StageManager : MonoBehaviour
         if (_currentEnemyModel != null) _currentEnemyModel.OnDead -= OnEnemyDead;
 
         // --- 보상 지급 (GameManager: public int gold, exp) ---
-        //var data = _currentEnemyModel?.data;
-        //if (data != null && GameManager.Instance != null)
-        //{
-        //    // 골드
-        //    int gMin = Mathf.Max(0, data.goldRange.x);
-        //    int gMax = Mathf.Max(gMin, data.goldRange.y);
-        //    int goldGain = UnityEngine.Random.Range(gMin, gMax + 1);
-        //    // GameManager.Instance.gold += goldGain;
+        var data = _currentEnemyModel?.data;
+        if (data != null && GameManager.Instance != null)
+        {
+            // 골드
+            int gMin = Mathf.Max(0, data.goldRange.x);
+            int gMax = Mathf.Max(gMin, data.goldRange.y);
+            int goldGain = UnityEngine.Random.Range(gMin, gMax + 1);
+            GameManager.Instance.gold += goldGain;
 
-        //    // 무기강화 EXP
-        //    // if (data.enhanceExp > 0)
-        //         // GameManager.Instance.exp += data.enhanceExp;
+             // 무기강화 EXP
+             if (data.enhanceExp > 0)
+                GameManager.Instance.exp += data.enhanceExp;
 
-        //    // 골드 UI가 있으면 갱신 (없으면 이 줄은 주석 처리해도 됨)
-        //    // GameManager.Instance.UpdateGoldUI();
-        //    // EXP UI 갱신 메서드가 있으면 여기서 호출
-        //    // GameManager.Instance.UpdateExpUI();
-        //}
+            // 골드 UI가 있으면 갱신 (없으면 이 줄은 주석 처리해도 됨)
+             GameManager.Instance.UpdateGoldUI();
+            // EXP UI 갱신 메서드가 있으면 여기서 호출
+            // GameManager.Instance.UpdateExpUI();
+        }
         // -----------------------------------------------------
 
         killCount++;
