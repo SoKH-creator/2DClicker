@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour
         set 
         { 
             gold = value;
-            OnGoldChanged.Invoke();
+            OnGoldChanged?.Invoke(gold);
+            UpdateGoldUI();
         }
     }
     public int Exp
@@ -32,7 +33,8 @@ public class GameManager : MonoBehaviour
         set
         {
             exp = value;
-            OnExpChanged.Invoke();
+            OnExpChanged?.Invoke(exp);
+            UpdateExpUI();
         }
     }
 
@@ -52,8 +54,8 @@ public class GameManager : MonoBehaviour
     public FinalStats finalStats;
     public StatHandler statHandler; // StatHandler 오브젝트
 
-    public event Action OnGoldChanged;
-    public event Action OnExpChanged;
+    public event Action<int> OnGoldChanged;
+    public event Action<int> OnExpChanged;
     
     private static GameManager instance = null;
     public static GameManager Instance { get { return instance; } }
@@ -90,33 +92,19 @@ public class GameManager : MonoBehaviour
     {
         goldText.text = $"{gold}";
     }
-    public void TryUseGold(int amount)
-    {
-        if (gold < amount)
-        {
-            StartCoroutine(ShowWarning("골드가 부족합니다!"));
-        }
-        else
-        {
-            gold -= amount;
-            UpdateGoldUI();
-        }
-    }
     public void UpdateExpUI()
     {
         expText.text = $"{exp}";
     }
+    public void TryUseGold(int amount)
+    {
+        if (gold < amount) StartCoroutine(ShowWarning("골드가 부족합니다!"));
+        else Gold -= amount;
+    }    
     public void TryUseExp(int amount)
     {
-        if (exp < amount)
-        {
-            StartCoroutine(ShowWarning("경험치가 부족합니다!"));
-        }
-        else
-        {
-            exp -= amount;
-            UpdateExpUI();
-        }
+        if (exp < amount) StartCoroutine(ShowWarning("경험치가 부족합니다!"));
+        else Exp -= amount;
     }
 
     public void WarningClose()

@@ -19,26 +19,30 @@ public class WeaponModel
         _state = new WeaponState(id);
     }
 
-    public bool TryUnlock(ref int exp)
+    public bool TryUnlock(int expTotal, out int expSpent)
     {
         int cost = GetRequiredExp();
-        if (_state.unlocked || exp < cost)
+        if (_state.unlocked || expTotal < cost)
+        {
+            expSpent = 0;
             return false;
-        
-        exp -= cost;
+        }
+         
+        expSpent = cost;
         _state.unlocked = true;
         OnChanged?.Invoke();
         return true;
     }
-    public bool TryUpgrade(ref int exp)
+    public bool TryUpgrade(int expTotal, out int expSpent)
     {
-        if (!_state.unlocked) return false;
-        
         int cost = GetRequiredExp();
-        if (exp < cost)
+        if (!_state.unlocked || expTotal < cost)
+        {
+            expSpent = 0;
             return false;
-
-        exp -= cost;
+        }
+        
+        expSpent = cost;
         _state.level += 1;
         OnChanged?.Invoke();
         return true;

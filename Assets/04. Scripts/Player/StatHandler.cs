@@ -8,6 +8,7 @@ public class StatHandler : MonoBehaviour
     private Dictionary<StatType, int> upgradeLevels = new Dictionary<StatType, int>();
     private Dictionary<StatType, int> upgradeValue = new Dictionary<StatType, int>();
 
+    /*
     // 골드 변수 통합
     private int _gold = 1000; // 초기 골드 (테스트용)
     public int gold
@@ -18,9 +19,10 @@ public class StatHandler : MonoBehaviour
             _gold = value;
             OnGoldChanged?.Invoke(); // 골드 변경 시 이벤트 발생
         }
-    }
+    } 
 
     public Action OnGoldChanged; // 골드 변경 이벤트
+    */
 
     // 특정 능력치 레벨 가져오기
     public int GetLevel(StatType type)
@@ -56,9 +58,9 @@ public class StatHandler : MonoBehaviour
 
         int cost = upgradeData.GetCostAtLevel(currentLevel);
 
-        if (gold >= cost)
+        if (GameManager.Instance.Gold >= cost)
         {
-            gold -= cost; // 프로퍼티를 통해 설정 (이벤트 발생)
+            GameManager.Instance.Gold -= cost; // 프로퍼티를 통해 설정 (이벤트 발생)
             upgradeLevels[upgradeData.statType] = currentLevel + 1;
 
             Debug.Log($"{upgradeData.upgradeName} 업그레이드 성공! Lv {currentLevel + 1}, 현재 값: {upgradeData.GetValueAtLevel(currentLevel + 1)}");

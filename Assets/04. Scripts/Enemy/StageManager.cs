@@ -173,14 +173,14 @@ public class StageManager : MonoBehaviour
             int gMin = Mathf.Max(0, data.goldRange.x);
             int gMax = Mathf.Max(gMin, data.goldRange.y);
             int goldGain = UnityEngine.Random.Range(gMin, gMax + 1);
-            GameManager.Instance.gold += goldGain;
-            GameManager.Instance.UpdateGoldUI();
+            GameManager.Instance.Gold += goldGain;
+            //GameManager.Instance.UpdateGoldUI();
 
             // 무기강화 EXP
             if (data.enhanceExp > 0)
             {
-                GameManager.Instance.exp += data.enhanceExp;
-                // GameManager.Instance.UpdateExpUI(); // 만들었으면 호출
+                GameManager.Instance.Exp += data.enhanceExp;
+                //GameManager.Instance.UpdateExpUI();
             }
         }
         // -----------------------------------------------------

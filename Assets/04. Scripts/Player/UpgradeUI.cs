@@ -23,18 +23,18 @@ public class UpgradeUI : MonoBehaviour
         UpdateUI();
 
         // 골드 변경 이벤트 구독
-        if (statHandler != null)
+        if (GameManager.Instance != null)
         {
-            statHandler.OnGoldChanged += UpdateUI;
+            GameManager.Instance.OnGoldChanged += OnGoldChanged;
         }
     }
 
     private void OnDestroy()
     {
         // 이벤트 구독 해제 (메모리 누수 방지)
-        if (statHandler != null)
+        if (GameManager.Instance != null)
         {
-            statHandler.OnGoldChanged -= UpdateUI;
+            GameManager.Instance.OnGoldChanged -= OnGoldChanged;
         }
     }
 
@@ -50,6 +50,7 @@ public class UpgradeUI : MonoBehaviour
         }
     }
 
+    private void OnGoldChanged(int newGold) => UpdateUI(); 
     private void UpdateUI()
     {
         int currentLevel = statHandler.GetLevel(upgradeData.statType);
@@ -60,7 +61,7 @@ public class UpgradeUI : MonoBehaviour
         costText.text = $"Cost: {upgradeData.GetCostAtLevel(currentLevel)}";
 
         // 비용 색상 (골드 부족시 빨간색)
-        if (statHandler.gold < upgradeData.GetCostAtLevel(currentLevel))
+        if (GameManager.Instance.Gold < upgradeData.GetCostAtLevel(currentLevel))
             costText.color = Color.red;
         else
             costText.color = Color.black;
