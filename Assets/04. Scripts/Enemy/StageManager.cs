@@ -74,7 +74,6 @@ public class StageManager : MonoBehaviour
     {
         if (enemyPrefab == null) return;
 
-        // 안전 가드: 풀 비었으면 종료
         if (enemyPool == null || enemyPool.Length == 0)
         {
             Debug.LogError("StageManager: enemyPool이 비었습니다.");
